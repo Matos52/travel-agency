@@ -1,5 +1,5 @@
 import { Header, StatsCard, TripCard } from "components";
-import { user, dashboardStats, allTrips } from "../../constants/index";
+import { user, dashboardStats, allTrips } from "~/constants";
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
