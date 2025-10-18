@@ -1,0 +1,64 @@
+############################
+# 🧠 General
+############################
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+############################
+# ⚙️ IntelliJ IDEA
+############################
+.idea/
+*.iml
+out/
+
+############################
+# ☕ Java / Maven backend
+############################
+backend/target/
+backend/.mvn/
+backend/dependency-reduced-pom.xml
+backend/logs/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# Exclude environment/config files
+backend/*.env
+backend/application-*.properties
+backend/application-*.yml
+!backend/application.properties
+!backend/application.yml
+
+############################
+# ⚛️ React frontend
+############################
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.react-router/
+frontend/.DS_Store
+
+############################
+# 🧪 Testing / Coverage
+############################
+/coverage/
+/test-output/
+/reports/
+
+############################
+# 🐳 Docker (ak ho neskôr použiješ)
+############################
+*.pid
+*.seed
+docker-compose.override.yml
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+Notes.txt
