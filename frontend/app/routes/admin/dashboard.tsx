@@ -1,14 +1,40 @@
 import { Header, StatsCard, TripCard } from "components";
+import { useEffect, useState } from "react";
 import { user, dashboardStats, allTrips } from "~/constants";
+import { ToastContainer, toast } from 'react-toastify';
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
 
 const dashboard = () => {
+  const [user, setUser] = useState[null];
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/getUser`, {
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch user");
+        console.log("Failed to fetch user", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <main className="dashboard wrapper">
+      <ToastContainer />
       <Header
-        title={`Welcome ${user?.name ?? "Guest"}`}
+        title={`Welcome ${user?.userName ?? "Guest"}`}
         description="Track activity, trends and popular destinations in real time"
       />
       <section className="flex flex-col gap-6">
