@@ -32,6 +32,9 @@ public class User implements UserDetails {
   @PrePersist
   protected void onCreate() {
     joinedAt = LocalDateTime.now();
+    if (status == null) {
+      status = Status.USER;
+    }
   }
 
   @Override

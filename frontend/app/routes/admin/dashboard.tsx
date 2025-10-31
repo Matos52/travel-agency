@@ -1,40 +1,45 @@
 import { Header, StatsCard, TripCard } from "components";
 import { useEffect, useState } from "react";
-import { user, dashboardStats, allTrips } from "~/constants";
+import { dashboardStats, allTrips } from "~/constants";
 import { ToastContainer, toast } from 'react-toastify';
+import axios from "axios";
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
 
 const dashboard = () => {
-  const [user, setUser] = useState[null];
+  const [user, setUser] = useState({
+      username: "",
+      email: "",
+      accountId: 0,
+      imageUrl: "",
+      joinedAt: "",
+      status: "",
+  });
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${backendUrl}/getUser`, {
-          credentials: "include",
-        });
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/getUser`, {
+        withCredentials: true,
+      });
+      console.log(data)
+      setUser(data);
+    } catch (error) {
+      toast.error("Failed to fetch user");
+      console.log("Failed to fetch user", error);
+    }
+  };
 
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-        }
-      } catch (error) {
-        toast.error("Failed to fetch user");
-        console.log("Failed to fetch user", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  fetchUser();
+}, []);
 
   return (
     <main className="dashboard wrapper">
       <ToastContainer />
       <Header
-        title={`Welcome ${user?.userName ?? "Guest"}`}
+        title={`Welcome ${user?.username ?? "Guest"}`}
         description="Track activity, trends and popular destinations in real time"
       />
       <section className="flex flex-col gap-6">
