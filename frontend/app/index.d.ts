@@ -1,3 +1,12 @@
+declare interface CreatedUser {
+  username: string;
+  email: string;
+  accountId: number;
+  imageUrl: string;
+  joinedAt: string;
+  status: string;
+}
+
 declare interface BaseUser {
   id: string;
   name: string;

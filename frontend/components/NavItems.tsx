@@ -1,13 +1,10 @@
 import { Link, NavLink } from "react-router";
 import { sidebarItems } from "~/constants";
+import { useUser } from "~/context/UserContext";
 import { cn } from "~/lib/utils";
 
 const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
-  const user = {
-    name: "Adrian",
-    email: "contact@jsmastery.pro",
-    imageUrl: "/assets/images/david.webp",
-  };
+  const { user } = useUser();
 
   return (
     <section className="nav-items">
@@ -19,7 +16,7 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
       <div className="container">
         <nav>
           {sidebarItems.map(({ id, href, icon, label }) => (
-            <NavLink to={href}>
+            <NavLink key={id} to={href}>
               {({ isActive }: { isActive: boolean }) => (
                 <div
                   className={cn("group nav-item", {
@@ -42,10 +39,10 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
         <footer className="nav-footer">
           <img
             src={user?.imageUrl || "/assets/images/david.webp"}
-            alt={user?.name || "David"}
+            alt={user?.username || "David"}
           />
           <article>
-            <h2>{user?.name}</h2>
+            <h2>{user?.username}</h2>
             <p>{user?.email}</p>
           </article>
           <button

@@ -1,43 +1,15 @@
 import { Header, StatsCard, TripCard } from "components";
-import { useEffect, useState } from "react";
 import { dashboardStats, allTrips } from "~/constants";
-import { ToastContainer, toast } from 'react-toastify';
-import axios from "axios";
+import { useUser } from "~/context/UserContext";
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
 
 const dashboard = () => {
-  const [user, setUser] = useState({
-      username: "",
-      email: "",
-      accountId: 0,
-      imageUrl: "",
-      joinedAt: "",
-      status: "",
-  });
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const { data } = await axios.get(`${backendUrl}/getUser`, {
-        withCredentials: true,
-      });
-      console.log(data)
-      setUser(data);
-    } catch (error) {
-      toast.error("Failed to fetch user");
-      console.log("Failed to fetch user", error);
-    }
-  };
-
-  fetchUser();
-}, []);
+  const { user } = useUser();
 
   return (
     <main className="dashboard wrapper">
-      <ToastContainer />
       <Header
         title={`Welcome ${user?.username ?? "Guest"}`}
         description="Track activity, trends and popular destinations in real time"
