@@ -2,18 +2,6 @@ import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { Link } from "react-router";
 import.meta.env.VITE_BACKEND_URL
 
-// export async function clientLoader() {
-//     try {
-//         const user = await account.get();
-
-//         if(!user.$id) {
-//             return redirect("/");
-//         }
-//     } catch (e) {
-//         console.log("Error fetching user", e)
-//     }
-// }
-
 const signIn = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 

@@ -1,10 +1,13 @@
 import { Link, NavLink } from "react-router";
 import { sidebarItems } from "~/constants";
-import { useUser } from "~/context/UserContext";
 import { cn } from "~/lib/utils";
 
-const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
-  const { user } = useUser();
+interface NavItemsProps {
+  user: CreatedUser;
+  handleClick?: () => void;
+}
+
+const NavItems = ({ user, handleClick }: NavItemsProps) => {
 
   return (
     <section className="nav-items">

@@ -2,16 +2,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 interface UserContextType {
-  user: CreatedUser | null;
+  user: CreatedUser | null | undefined;
   setUser: (user: CreatedUser | null) => void;
 }
 
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined
-);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<CreatedUser | null>(null);
+  const [user, setUser] = useState<CreatedUser | null | undefined>();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -23,6 +21,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(data);
       } catch (error) {
         console.log("Failed to fetch user", error);
+        setUser(null);
       }
     };
 
