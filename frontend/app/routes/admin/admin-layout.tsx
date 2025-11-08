@@ -7,12 +7,19 @@ import.meta.env.VITE_BACKEND_URL;
 const AdminLayout = () => {
   const { user } = useUser();
 
+  //user is loading
   if (user === undefined) {
     return <div>Loading...</div>;
   }
 
+  //user is not logged in
   if (!user) {
     return <Navigate to="/sign-in" replace />;
+  }
+
+  //user does not have rights to see dashboard page
+  if(user.status === 'ADMIN') {
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -20,11 +27,11 @@ const AdminLayout = () => {
       <MobileSidebar />
       <aside className="w-full max-w-[270px] hidden lg:block">
         <SidebarComponent width={270} enableGestures={false}>
-          <NavItems user={user} />
+          <NavItems />
         </SidebarComponent>
       </aside>
       <aside className="children">
-        <Outlet context={{ user }} />
+        <Outlet />
       </aside>
     </div>
   );

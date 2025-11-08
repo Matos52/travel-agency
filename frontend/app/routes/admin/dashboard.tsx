@@ -1,14 +1,13 @@
 import { Header, StatsCard, TripCard } from "components";
 import { useOutletContext } from "react-router";
 import { dashboardStats, allTrips } from "~/constants";
+import { useUser } from "~/context/UserContext";
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
 
-type Ctx = { user: CreatedUser }
-
 const dashboard = () => {
-  const { user } = useOutletContext<Ctx>();
+  const { user } = useUser();
 
   return (
     <main className="dashboard wrapper">

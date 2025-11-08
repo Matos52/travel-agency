@@ -1,13 +1,10 @@
 import { Link, NavLink } from "react-router";
 import { sidebarItems } from "~/constants";
+import { useUser } from "~/context/UserContext";
 import { cn } from "~/lib/utils";
 
-interface NavItemsProps {
-  user: CreatedUser;
-  handleClick?: () => void;
-}
-
-const NavItems = ({ user, handleClick }: NavItemsProps) => {
+const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
+  const { user, logout } = useUser();
 
   return (
     <section className="nav-items">
@@ -48,10 +45,7 @@ const NavItems = ({ user, handleClick }: NavItemsProps) => {
             <h2>{user?.username}</h2>
             <p>{user?.email}</p>
           </article>
-          <button
-            onClick={() => console.log("logout")}
-            className="cursor-pointer"
-          >
+          <button onClick={logout} className="cursor-pointer">
             <img
               src="/assets/icons/logout.svg"
               alt="logout"

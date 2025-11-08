@@ -1,15 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 interface UserContextType {
   user: CreatedUser | null | undefined;
   setUser: (user: CreatedUser | null) => void;
+  logout: () => Promise<void>;
 }
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined
+);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<CreatedUser | null | undefined>();
+  const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -28,8 +33,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     fetchUser();
   }, []);
 
+  const logout = async () => {
+    try {
+      console.log("logout")
+      const data = await axios.post(`${backendUrl}/userLogout`, {}, { withCredentials: true });
+      console.log(data);
+      setUser(null);
+      navigate("/sign-in", { replace: true });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </UserContext.Provider>
   );
