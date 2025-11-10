@@ -10,6 +10,7 @@ public record UserDTO(
     String accountId,
     String imageUrl,
     LocalDateTime joinedAt,
+    Integer itineraryCreated,
     Status status
 ) {
 }

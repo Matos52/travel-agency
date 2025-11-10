@@ -8,6 +8,8 @@ import com.travelAgency.mapper.UserMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,12 +22,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDTO getUser(String token) {
-
     String email = jwtService.extractSubject(token);
-
     User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email, User.class));
-
     return userMapper.toUserDTO(user);
+  }
+
+  @Override
+  public Page<UserDTO> getUsers(int pageIndex, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
+    Page<User> users = userRepository.findAll(pageRequest);
+    return users.map(userMapper::toUserDTO);
   }
 
   @Override

@@ -26,6 +26,7 @@ public class User implements UserDetails {
   private String accountId;
   private String imageUrl;
   private LocalDateTime joinedAt;
+  private Integer itineraryCreated;
   @Enumerated(EnumType.STRING)
   private Status status;
 
@@ -35,6 +36,7 @@ public class User implements UserDetails {
     if (status == null) {
       status = Status.USER;
     }
+    itineraryCreated = 0;
   }
 
   @Override

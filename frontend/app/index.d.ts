@@ -4,7 +4,8 @@ declare interface CreatedUser {
   accountId: number;
   imageUrl: string;
   joinedAt: string;
-  status: string;
+  itineraryCreated: number | string;
+  status: "USER" | "ADMIN";
 }
 
 declare interface BaseUser {
