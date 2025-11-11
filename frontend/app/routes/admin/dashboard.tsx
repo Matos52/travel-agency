@@ -6,7 +6,7 @@ import { useUser } from "~/context/UserContext";
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
   dashboardStats;
 
-const dashboard = () => {
+const Dashboard = () => {
   const { user } = useUser();
 
   return (
@@ -60,4 +60,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;
