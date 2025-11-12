@@ -31,6 +31,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Status status;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
   private List<Trip> trips = new ArrayList<>();
 
   @PrePersist

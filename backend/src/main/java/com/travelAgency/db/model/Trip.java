@@ -31,6 +31,7 @@ public class Trip {
   private String paymentLink;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
+  @ToString.Exclude
   private User user;
 
   @PrePersist
