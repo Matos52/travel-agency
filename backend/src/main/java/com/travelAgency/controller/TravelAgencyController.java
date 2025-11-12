@@ -1,6 +1,9 @@
 package com.travelAgency.controller;
 
+import com.travelAgency.db.model.dto.TripRequest;
+import com.travelAgency.db.model.dto.TripResponse;
 import com.travelAgency.db.model.dto.UserDTO;
+import com.travelAgency.service.TripService;
 import com.travelAgency.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Min;
@@ -14,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @CommonsLog
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class TravelAgencyController {
 
   private final UserService userService;
+  private final TripService tripService;
 
   @GetMapping("/getUser")
   ResponseEntity<UserDTO> getUser(@CookieValue("ACCESS_TOKEN") String token) {
@@ -35,5 +39,10 @@ public class UserController {
   ResponseEntity<HttpStatus> logout(HttpServletResponse response) {
     userService.logout(response);
     return ResponseEntity.noContent().build();
+  }
+
+  @PostMapping("/create-trip")
+  ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
+    return ResponseEntity.ok().body(tripService.createTrip(tripRequest));
   }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class User implements UserDetails {
   private Integer itineraryCreated;
   @Enumerated(EnumType.STRING)
   private Status status;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Trip> trips = new ArrayList<>();
 
   @PrePersist
   protected void onCreate() {
@@ -37,6 +40,11 @@ public class User implements UserDetails {
       status = Status.USER;
     }
     itineraryCreated = 0;
+  }
+
+  public void addTrip(Trip trip) {
+    trips.add(trip);
+    trip.setUser(this);
   }
 
   @Override

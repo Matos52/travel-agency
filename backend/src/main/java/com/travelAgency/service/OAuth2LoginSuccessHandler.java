@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -34,6 +35,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
   }
 
   @Override
+  @Transactional
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException {
@@ -45,11 +47,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     String imageUrl = oAuth2User.getAttribute("picture");
 
     userRepository.findByEmail(email).orElseGet(() -> {
-      User user = new User();
-      user.setUsername(username);
-      user.setEmail(email);
-      user.setAccountId(accountId);
-      user.setImageUrl(imageUrl);
+      User user = User.builder()
+                      .username(username)
+                      .email(email)
+                      .accountId(accountId)
+                      .imageUrl(imageUrl)
+                      .build();
       return userRepository.save(user);
     });
 

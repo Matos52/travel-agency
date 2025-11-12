@@ -18,8 +18,8 @@ public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(columnDefinition = "MEDIUMTEXT")
   private String tripDetail;
-
   @ElementCollection
   @CollectionTable(
       name = "trip_images",
@@ -27,8 +27,14 @@ public class Trip {
   )
   @Column(name = "image_url")
   private List<String> imageUrls = new ArrayList<>();
-
   private LocalDateTime createdAt;
   private String paymentLink;
-  private String userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = LocalDateTime.now();
+  }
 }

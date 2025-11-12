@@ -32,3 +32,11 @@ app:
     cookie-name: ACCESS_TOKEN
   frontend:
     url: http://localhost:5173/dashboard  # where to redirect after login
+
+gemini:
+  api-key: ${GEMINI_API_KEY}
+  model: gemini-2.0-flash
+  base-url: https://generativelanguage.googleapis.com/v1beta/models
+
+
+
