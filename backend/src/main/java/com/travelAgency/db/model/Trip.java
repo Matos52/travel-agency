@@ -18,14 +18,14 @@ public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(columnDefinition = "MEDIUMTEXT")
+  @Column(columnDefinition = "TEXT")
   private String tripDetail;
   @ElementCollection
   @CollectionTable(
       name = "trip_images",
       joinColumns = @JoinColumn(name = "trip_id")
   )
-  @Column(name = "image_url")
+  @Column(name = "image_url", length = 1024)
   private List<String> imageUrls = new ArrayList<>();
   private LocalDateTime createdAt;
   private String paymentLink;

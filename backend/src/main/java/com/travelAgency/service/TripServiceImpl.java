@@ -18,6 +18,7 @@ public class TripServiceImpl implements TripService {
 
   private final UserRepository userRepository;
   private final GeminiService geminiService;
+  private final UnsplashService unsplashService;
 
   @Override
   @Transactional
@@ -25,6 +26,7 @@ public class TripServiceImpl implements TripService {
 
     String prompt = buildPrompt(tripRequest);
 
+    // Call gemini service logic
     String generatedTripPlan = geminiService.generateTripPlan(prompt);
 
     User user = userRepository
@@ -38,7 +40,11 @@ public class TripServiceImpl implements TripService {
     // User is the owner of the relationship, so we can add the trip to user and save it, then by cascade it will save also the trip to db
     user.addTrip(trip);
     user.setItineraryCreated(user.getItineraryCreated() + 1);
-    trip.setImageUrls(List.of(""));
+
+    // Call unsplash service logic
+    List<String> imageUrls =
+        unsplashService.getImages(tripRequest.country(), tripRequest.interest(), tripRequest.travelStyle());
+    trip.setImageUrls(imageUrls);
 
     User createdUser = userRepository.save(user);
 

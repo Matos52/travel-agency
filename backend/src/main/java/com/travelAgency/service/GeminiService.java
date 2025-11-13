@@ -21,13 +21,13 @@ public class GeminiService {
   private final WebClient.Builder webClientBuilder;
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-  @Value("${gemini.api-key}")
+  @Value("${app.gemini.api-key}")
   private String geminiApiKey;
 
-  @Value("${gemini.model}")
+  @Value("${app.gemini.model}")
   private String model;
 
-  @Value("${gemini.base-url}")
+  @Value("${app.gemini.base-url}")
   private String baseUrl;
 
   public String generateTripPlan(String prompt) {
@@ -40,15 +40,18 @@ public class GeminiService {
     );
 
     return webClient.post()
-        .uri(String.format("/%s:generateContent?key=%s", model, geminiApiKey))
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(body)
-        .retrieve()
-        .onStatus(HttpStatusCode::isError, response -> response.bodyToMono(String.class)
-            .flatMap(error -> Mono.error(new GeminiException("Gemini Api Error: " + error))))
-        .bodyToMono(Map.class)
-        .map(this::extractText)
-        .block();
+                    .uri(String.format("/%s:generateContent?key=%s", model, geminiApiKey))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(body)
+                    .retrieve()
+                    .onStatus(
+                        HttpStatusCode::isError, response -> response.bodyToMono(String.class)
+                                                                     .flatMap(error -> Mono.error(new GeminiException(
+                                                                         "Gemini Api Error: " + error)))
+                    )
+                    .bodyToMono(Map.class)
+                    .map(this::extractText)
+                    .block();
   }
 
   private String extractText(Map<String, Object> response) {
@@ -56,19 +59,20 @@ public class GeminiService {
       JsonNode root = OBJECT_MAPPER.valueToTree(response);
 
       String rawText = root.path("candidates")
-                              .path(0)
-                              .path("content")
-                              .path("parts")
-                              .path(0)
-                              .path("text")
-                              .asText("");
+                           .path(0)
+                           .path("content")
+                           .path("parts")
+                           .path(0)
+                           .path("text")
+                           .asText("");
 
       return rawText
           .replaceAll("^```json\\s*", "")
           .replaceAll("```$", "")
           .trim();
 
-    } catch (Exception error) {
+    }
+    catch (Exception error) {
       throw new GeminiException("Error extracting Gemini text: " + error);
     }
   }
