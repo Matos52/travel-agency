@@ -2,11 +2,18 @@ package com.travelAgency.service;
 
 import com.travelAgency.db.model.Trip;
 import com.travelAgency.db.model.User;
+import com.travelAgency.db.model.dto.TripDTO;
 import com.travelAgency.db.model.dto.TripRequest;
 import com.travelAgency.db.model.dto.TripResponse;
+import com.travelAgency.db.repository.TripRepository;
 import com.travelAgency.db.repository.UserRepository;
+import com.travelAgency.exception.EntityNotFoundException;
 import com.travelAgency.exception.UserNotFoundException;
+import com.travelAgency.mapper.TripMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +24,10 @@ import java.util.List;
 public class TripServiceImpl implements TripService {
 
   private final UserRepository userRepository;
+  private final TripRepository tripRepository;
   private final GeminiService geminiService;
   private final UnsplashService unsplashService;
+  private final TripMapper tripMapper;
 
   @Override
   @Transactional
@@ -51,6 +60,19 @@ public class TripServiceImpl implements TripService {
     return new TripResponse(
         createdUser.getTrips().getLast().getId()
     );
+  }
+
+  @Override
+  public Page<TripDTO> getTrips(int pageIndex, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, Sort.by("createdAt").descending());
+    Page<Trip> trips = tripRepository.findAll(pageRequest);
+    return trips.map(tripMapper::toTripDTO);
+  }
+
+  @Override
+  public TripDTO getTrip(Long id) {
+    Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Trip.class));
+    return tripMapper.toTripDTO(trip);
   }
 
   private String buildPrompt(TripRequest tripRequest) {

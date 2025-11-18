@@ -25,6 +25,7 @@ export const links: Route.LinksFunction = () => [
 
 import { registerLicense } from "@syncfusion/ej2-base";
 import { UserProvider } from "./context/UserContext";
+import { TripProvider } from "./context/TripContext";
 
 registerLicense(import.meta.env.VITE_SYNCFUSION_LICENSE_KEY);
 
@@ -49,7 +50,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <UserProvider>
-      <Outlet />
+      <TripProvider>
+        <Outlet />
+      </TripProvider>
     </UserProvider>
   );
 }

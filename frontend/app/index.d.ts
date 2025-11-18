@@ -1,3 +1,11 @@
+declare interface CreatedTrip {
+  id: number;
+  tripDetail: string;
+  imageUrls: string[];
+  createdAt: string;
+  paymentLink: string;
+}
+
 declare interface CreatedUser {
   username: string;
   email: string;

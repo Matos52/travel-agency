@@ -22,7 +22,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const [user, setUser] = useState<CreatedUser | null | undefined>();
+  const [user, setUser] = useState<CreatedUser | null>(null);
   const [users, setUsers] = useState<CreatedUser[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -75,7 +75,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, users, fetchUsers, logout, pageIndex, pageSize, setPageIndex, setPageSize, totalElements }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        users,
+        fetchUsers,
+        logout,
+        pageIndex,
+        pageSize,
+        setPageIndex,
+        setPageSize,
+        totalElements,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

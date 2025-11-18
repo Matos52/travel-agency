@@ -1,5 +1,6 @@
 package com.travelAgency.controller;
 
+import com.travelAgency.db.model.dto.TripDTO;
 import com.travelAgency.db.model.dto.TripRequest;
 import com.travelAgency.db.model.dto.TripResponse;
 import com.travelAgency.db.model.dto.UserDTO;
@@ -44,5 +45,18 @@ public class TravelAgencyController {
   @PostMapping("/create-trip")
   ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
     return ResponseEntity.ok().body(tripService.createTrip(tripRequest));
+  }
+
+  @GetMapping("/trips/{tripId}")
+  ResponseEntity<TripDTO> getTrip(@PathVariable Long tripId) {
+    return ResponseEntity.ok().body(tripService.getTrip(tripId));
+  }
+
+  @GetMapping("/trips")
+  ResponseEntity<Page<TripDTO>> getTrips(
+      @RequestParam(defaultValue = "0") @Min(0) int pageIndex,
+      @RequestParam(defaultValue = "5") @Min(0) int pageSize) {
+    Page<TripDTO> trips = tripService.getTrips(pageIndex, pageSize);
+    return ResponseEntity.ok().body(trips);
   }
 }

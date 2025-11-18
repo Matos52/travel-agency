@@ -8,7 +8,7 @@ public interface UserService {
 
   UserDTO getUser(String token);
 
-  Page<UserDTO> getUsers(int pageRequest, int pageSize);
+  Page<UserDTO> getUsers(int pageIndex, int pageSize);
 
   void logout(HttpServletResponse response);
 }
