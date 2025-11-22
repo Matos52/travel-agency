@@ -23,7 +23,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const [trip, setTrip] = useState<CreatedTrip | null>(null);
   const [trips, setTrips] = useState<CreatedTrip[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(8);
   const [totalElements, setTotalElements] = useState(0);
 
   const fetchTrip = async (tripId: number) => {
