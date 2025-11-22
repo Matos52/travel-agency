@@ -22,7 +22,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const [user, setUser] = useState<CreatedUser | null>(null);
+  const [user, setUser] = useState<CreatedUser | null | undefined>();
   const [users, setUsers] = useState<CreatedUser[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);

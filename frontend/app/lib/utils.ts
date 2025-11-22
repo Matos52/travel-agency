@@ -27,6 +27,10 @@ export function parseMarkdownToJson(markdownText: string): unknown | null {
 }
 
 export function parseTripData(jsonString: string): Trip | null {
+    if(!jsonString) {
+        console.error("jsonString is undefined")
+        return null;
+    }
     try {
         return JSON.parse(jsonString);
     } catch (error) {
