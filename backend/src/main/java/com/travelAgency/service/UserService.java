@@ -1,6 +1,6 @@
 package com.travelAgency.service;
 
-import com.travelAgency.db.model.dto.UserDTO;
+import com.travelAgency.db.model.dto.user.UserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 

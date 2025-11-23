@@ -1,4 +1,4 @@
-package com.travelAgency.db.model.dto;
+package com.travelAgency.db.model.dto.trip;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -2,9 +2,9 @@ package com.travelAgency.service;
 
 import com.travelAgency.db.model.Trip;
 import com.travelAgency.db.model.User;
-import com.travelAgency.db.model.dto.TripDTO;
-import com.travelAgency.db.model.dto.TripRequest;
-import com.travelAgency.db.model.dto.TripResponse;
+import com.travelAgency.db.model.dto.trip.TripDTO;
+import com.travelAgency.db.model.dto.trip.TripRequest;
+import com.travelAgency.db.model.dto.trip.TripResponse;
 import com.travelAgency.db.repository.TripRepository;
 import com.travelAgency.db.repository.UserRepository;
 import com.travelAgency.exception.EntityNotFoundException;

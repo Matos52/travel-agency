@@ -1,4 +1,4 @@
-package com.travelAgency.db.model.dto;
+package com.travelAgency.db.model.dto.user;
 
 import com.travelAgency.db.model.Status;
 

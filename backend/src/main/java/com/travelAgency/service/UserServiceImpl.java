@@ -1,7 +1,7 @@
 package com.travelAgency.service;
 
 import com.travelAgency.db.model.User;
-import com.travelAgency.db.model.dto.UserDTO;
+import com.travelAgency.db.model.dto.user.UserDTO;
 import com.travelAgency.db.repository.UserRepository;
 import com.travelAgency.exception.UserNotFoundException;
 import com.travelAgency.mapper.UserMapper;

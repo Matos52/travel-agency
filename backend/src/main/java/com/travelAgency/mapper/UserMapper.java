@@ -1,7 +1,7 @@
 package com.travelAgency.mapper;
 
 import com.travelAgency.db.model.User;
-import com.travelAgency.db.model.dto.UserDTO;
+import com.travelAgency.db.model.dto.user.UserDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

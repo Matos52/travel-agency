@@ -1,4 +1,4 @@
-package com.travelAgency.db.model.dto;
+package com.travelAgency.db.model.dto.trip;
 
 import java.time.LocalDateTime;
 import java.util.List;
