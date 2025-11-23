@@ -12,10 +12,10 @@ import { cn, getFirstWord, parseTripData } from "~/lib/utils";
 const TripDetail = () => {
   const { tripId } = useParams();
   const { fetchTrip, fetchTrips, trip, trips } = useTrip();
-  const imageUrls = trip?.imageUrls || [];
+  const imageUrls = trip.imageUrls;
 
   const tripData = useMemo(() => {
-    if (!trip?.tripDetail) {
+    if (!trip.tripDetail) {
       return null;
     }
 
@@ -26,11 +26,9 @@ const TripDetail = () => {
     return trips.map(({ id, tripDetail, imageUrls }) => ({
       id,
       ...(tripDetail ? parseTripData(tripDetail) : {}),
-      imageUrls: imageUrls ?? [],
+      imageUrls: imageUrls,
     }));
   }, [trips]);
-
-  console.log(trips);
 
   const {
     name,

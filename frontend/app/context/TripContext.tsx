@@ -1,9 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import axios from "axios";
 
+const emptyCreatedTrip: CreatedTrip = {
+  id: 0,
+  tripDetail: "",
+  imageUrls: [],
+  createdAt: "",
+  paymentLink: ""
+};
+
 interface TripContextType {
-  trip: CreatedTrip | null | undefined;
-  setTrip: (trip: CreatedTrip | null) => void;
+  trip: CreatedTrip;
+  setTrip: (trip: CreatedTrip) => void;
   trips: CreatedTrip[];
   fetchTrip: (tripId: number) => Promise<void>;
   fetchTrips: (pageIndex: number, pageSize: number) => Promise<void>;
@@ -20,7 +28,7 @@ export const TripContext = createContext<TripContextType | undefined>(
 
 export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const [trip, setTrip] = useState<CreatedTrip | null>(null);
+  const [trip, setTrip] = useState<CreatedTrip>(emptyCreatedTrip);
   const [trips, setTrips] = useState<CreatedTrip[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(8);
@@ -34,6 +42,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
       setTrip(data);
     } catch (error) {
       console.log(`Failed to fetch trip with id: ${tripId}`, error);
+      setTrip(emptyCreatedTrip);
     }
   };
 

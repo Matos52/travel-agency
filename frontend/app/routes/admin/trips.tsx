@@ -18,7 +18,7 @@ const Trips = () => {
     return trips.map(({ id, tripDetail, imageUrls }) => ({
       id,
       ...(tripDetail ? parseTripData(tripDetail) : {}),
-      imageUrls: imageUrls ?? [],
+      imageUrls: imageUrls,
     }));
   }, [trips]);
 

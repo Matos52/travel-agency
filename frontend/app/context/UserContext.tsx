@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 interface UserContextType {
-  user: CreatedUser | null | undefined;
+  user: CreatedUser | null;
   setUser: (user: CreatedUser | null) => void;
   logout: () => Promise<void>;
   users: CreatedUser[];
@@ -13,6 +13,7 @@ interface UserContextType {
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
   setPageSize: React.Dispatch<React.SetStateAction<number>>;
   totalElements: number;
+  loading: boolean;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -22,7 +23,9 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const [user, setUser] = useState<CreatedUser | null | undefined>();
+
+  const [user, setUser] = useState<CreatedUser | null>(null);
+  const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<CreatedUser[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -38,6 +41,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
         console.log("Failed to fetch user", error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -50,7 +55,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         params: { pageIndex, pageSize },
         withCredentials: true,
       });
-      console.log(data);
       setUsers(data.content);
       setTotalElements(data.totalElements);
     } catch (error) {
@@ -60,13 +64,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      console.log("logout");
       const data = await axios.post(
         `${backendUrl}/userLogout`,
         {},
         { withCredentials: true }
       );
-      console.log(data);
       setUser(null);
       navigate("/sign-in", { replace: true });
     } catch (err) {
@@ -87,6 +89,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setPageIndex,
         setPageSize,
         totalElements,
+        loading
       }}
     >
       {children}

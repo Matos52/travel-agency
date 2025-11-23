@@ -113,18 +113,36 @@ declare interface TrendResult {
   percentage: number;
 }
 
+// declare interface DashboardStats {
+//   totalUsers: number;
+//   usersJoined: {
+//     currentMonth: number;
+//     lastMonth: number;
+//   };
+//   userRole: {
+//     total: number;
+//     currentMonth: number;
+//     lastMonth: number;
+//   };
+//   totalTrips: number;
+//   tripsCreated: {
+//     currentMonth: number;
+//     lastMonth: number;
+//   };
+// }
+
 declare interface DashboardStats {
   totalUsers: number;
+  totalUsersWithUserRole: number;
+  totalTrips: number;
   usersJoined: {
     currentMonth: number;
     lastMonth: number;
   };
-  userRole: {
-    total: number;
+  usersJoinedWithUserRole: {
     currentMonth: number;
     lastMonth: number;
   };
-  totalTrips: number;
   tripsCreated: {
     currentMonth: number;
     lastMonth: number;

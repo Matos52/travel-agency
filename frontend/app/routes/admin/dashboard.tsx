@@ -1,13 +1,25 @@
 import { Header, StatsCard, TripCard } from "components";
-import { useOutletContext } from "react-router";
-import { dashboardStats, allTrips } from "~/constants";
+import { useEffect } from "react";
+import { allTrips } from "~/constants";
+import { useDashboard } from "~/context/DashboardContext";
 import { useUser } from "~/context/UserContext";
-
-const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } =
-  dashboardStats;
 
 const Dashboard = () => {
   const { user } = useUser();
+  const { dashboardStats, fetchDashboardStats } = useDashboard();
+
+  useEffect(() => {
+    fetchDashboardStats();
+  }, []);
+
+  const {
+    totalTrips,
+    totalUsers,
+    totalUsersWithUserRole,
+    tripsCreated,
+    usersJoined,
+    usersJoinedWithUserRole,
+  } = dashboardStats;
 
   return (
     <main className="dashboard wrapper">
@@ -31,9 +43,9 @@ const Dashboard = () => {
           />
           <StatsCard
             headerTitle="Active Users"
-            total={userRole.total}
-            currentMonthCount={userRole.currentMonth}
-            lastMonthCount={userRole.lastMonth}
+            total={totalUsersWithUserRole}
+            currentMonthCount={usersJoinedWithUserRole.currentMonth}
+            lastMonthCount={usersJoinedWithUserRole.lastMonth}
           />
         </div>
       </section>

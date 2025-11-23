@@ -23,9 +23,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query(
       """
-          SELECT new com.travelAgency.db.model.dto.dashboard.DailyCount(FUNCTION('DATE', u.joinedAt), COUNT(u))
+          SELECT new com.travelAgency.db.model.dto.dashboard.DailyCount(
+              CAST(u.joinedAt AS date),
+              COUNT(u)
+          )
           FROM User u
-          GROUP BY function('DATE', u.joinedAt)
+          GROUP BY CAST(u.joinedAt AS date)
           """)
   List<DailyCount> getUsersJoinedAtPerDay();
 }

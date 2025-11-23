@@ -13,9 +13,12 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
   @Query(
       """
-          SELECT new com.travelAgency.db.model.dto.dashboard.DailyCount(FUNCTION('DATE', t.createdAt), COUNT(t))
+          SELECT new com.travelAgency.db.model.dto.dashboard.DailyCount(
+              CAST(t.createdAt AS date),
+              COUNT(t)
+          )
           FROM Trip t
-          GROUP BY function('DATE', t.createdAt)
+          GROUP BY CAST(t.createdAt AS date)
           """)
   List<DailyCount> getTripsCreatedPerDay();
 }

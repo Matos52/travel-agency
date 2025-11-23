@@ -5,10 +5,10 @@ import { useUser } from "~/context/UserContext";
 import.meta.env.VITE_BACKEND_URL;
 
 const AdminLayout = () => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   //user is loading
-  if (user === undefined) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -18,7 +18,7 @@ const AdminLayout = () => {
   }
 
   //user does not have rights to see dashboard page
-  if(user.status === 'ADMIN') {
+  if(user.status !== 'USER') {
     return <Navigate to="/" replace />;
   }
 
