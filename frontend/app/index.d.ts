@@ -149,6 +149,11 @@ declare interface DashboardStats {
   };
 }
 
+declare interface DailyCount {
+  day: string;
+  count: number;
+}
+
 declare interface CreateTripResponse {
   id?: string;
 }

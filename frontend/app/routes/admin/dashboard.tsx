@@ -1,15 +1,56 @@
+import {
+  Category,
+  ChartComponent,
+  ColumnSeries,
+  DataLabel,
+  Inject,
+  SeriesCollectionDirective,
+  SeriesDirective,
+  SplineAreaSeries,
+  Tooltip,
+} from "@syncfusion/ej2-react-charts";
 import { Header, StatsCard, TripCard } from "components";
-import { useEffect } from "react";
-import { allTrips } from "~/constants";
+import { useEffect, useMemo } from "react";
+import { userXAxis, userYAxis } from "~/constants";
 import { useDashboard } from "~/context/DashboardContext";
+import { useTrip } from "~/context/TripContext";
 import { useUser } from "~/context/UserContext";
+import { parseTripData } from "~/lib/utils";
 
 const Dashboard = () => {
-  const { user } = useUser();
-  const { dashboardStats, fetchDashboardStats } = useDashboard();
+  const { user, users, fetchUsers } = useUser();
+  const {
+    dashboardStats,
+    fetchDashboardStats,
+    fetchTripsPerDay,
+    fetchUsersPerDay,
+    tripsPerDay,
+    usersPerDay,
+  } = useDashboard();
+  const { trips, fetchTrips } = useTrip();
+
+  const allTrips = useMemo(() => {
+    return trips.map(({ id, tripDetail, imageUrls }) => ({
+      id,
+      ...(tripDetail ? parseTripData(tripDetail) : {}),
+      imageUrls: imageUrls,
+    }));
+  }, [trips]);
+
+  const mappedUsers: UsersItineraryCount[] = users.map((user) => ({
+    imageUrl: user.imageUrl,
+    name: user.username,
+    count: user.itineraryCreated ?? Math.floor(Math.random() * 10),
+  }));
 
   useEffect(() => {
-    fetchDashboardStats();
+    Promise.all([
+      fetchDashboardStats(),
+      fetchUsersPerDay(),
+      fetchTripsPerDay(),
+      fetchUsers(0, 4),
+      fetchTrips(0, 4),
+    ]);
   }, []);
 
   const {
@@ -53,20 +94,60 @@ const Dashboard = () => {
       <section className="container">
         <h1 className="text-xl font-semibold">Created Trips</h1>
         <div className="trip-grid">
-          {allTrips
-            .slice(0, 4)
-            .map(({ id, name, imageUrls, itinerary, tags, estimatedPrice }) => (
+          {allTrips.map(
+            ({
+              id,
+              name,
+              imageUrls,
+              itinerary,
+              interests,
+              travelStyle,
+              estimatedPrice,
+            }) => (
               <TripCard
                 key={id}
                 id={id.toString()}
-                name={name}
-                imageUrl={imageUrls[0]}
+                name={name ?? ""}
                 location={itinerary?.[0]?.location ?? ""}
-                tags={tags}
-                price={estimatedPrice}
+                imageUrl={imageUrls?.[0] ?? ""}
+                tags={[interests ?? "", travelStyle ?? ""]}
+                price={estimatedPrice ?? ""}
               />
-            ))}
+            )
+          )}
         </div>
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <ChartComponent
+          id="chart-1"
+          primaryXAxis={userXAxis}
+          primaryYAxis={userYAxis}
+          title="User Growth"
+          tooltip={{ enable: true }}
+        >
+          <Inject
+            services={[
+              ColumnSeries,
+              SplineAreaSeries,
+              Category,
+              DataLabel,
+              Tooltip,
+            ]}
+          />
+
+          <SeriesCollectionDirective>
+            <SeriesDirective
+              dataSource={usersPerDay}
+              xName="day"
+              yName="count"
+              type="Column"
+              name="Column"
+              columnWidth={0.3}
+              cornerRadius={{topLeft: 10, topRight: 10}}
+            />
+          </SeriesCollectionDirective>
+        </ChartComponent>
       </section>
     </main>
   );

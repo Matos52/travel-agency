@@ -19,19 +19,34 @@ const emptyDashboardStats: DashboardStats = {
   },
 };
 
+const emptyDailyCount: DailyCount = {
+  day: "",
+  count: 0,
+};
+
 interface DashboardContextType {
   dashboardStats: DashboardStats;
-  setDashboardStats: (trip: DashboardStats) => void;
   fetchDashboardStats: () => Promise<void>;
+  usersPerDay: DailyCount;
+  fetchUsersPerDay: () => Promise<void>;
+  tripsPerDay: DailyCount;
+  fetchTripsPerDay: () => Promise<void>;
 }
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(
   undefined
 );
 
-export const DashboardProvider = ({ children }: { children: React.ReactNode }) => {
+export const DashboardProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats>(emptyDashboardStats);
+  const [dashboardStats, setDashboardStats] =
+    useState<DashboardStats>(emptyDashboardStats);
+  const [usersPerDay, setUsersPerDay] = useState<DailyCount>(emptyDailyCount);
+  const [tripsPerDay, setTripsPerDay] = useState<DailyCount>(emptyDailyCount);
 
   const fetchDashboardStats = async () => {
     try {
@@ -45,12 +60,39 @@ export const DashboardProvider = ({ children }: { children: React.ReactNode }) =
     }
   };
 
+  const fetchUsersPerDay = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/getUsersPerDay`, {
+        withCredentials: true,
+      });
+      setUsersPerDay(data);
+    } catch (error) {
+      console.log("Failed to fetch dashboardStats", error);
+      setUsersPerDay(emptyDailyCount);
+    }
+  };
+
+  const fetchTripsPerDay = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/getTripsPerDay`, {
+        withCredentials: true,
+      });
+      setTripsPerDay(data);
+    } catch (error) {
+      console.log("Failed to fetch dashboardStats", error);
+      setTripsPerDay(emptyDailyCount);
+    }
+  };
+
   return (
     <DashboardContext.Provider
       value={{
         dashboardStats,
-        setDashboardStats,
-        fetchDashboardStats
+        fetchDashboardStats,
+        usersPerDay,
+        fetchUsersPerDay,
+        tripsPerDay,
+        fetchTripsPerDay
       }}
     >
       {children}
@@ -60,6 +102,7 @@ export const DashboardProvider = ({ children }: { children: React.ReactNode }) =
 
 export const useDashboard = () => {
   const ctx = useContext(DashboardContext);
-  if (!ctx) throw new Error("useDashboard must be used inside DashboardProvider");
+  if (!ctx)
+    throw new Error("useDashboard must be used inside DashboardProvider");
   return ctx;
 };
