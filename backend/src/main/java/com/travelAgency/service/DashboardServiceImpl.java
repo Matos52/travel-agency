@@ -1,9 +1,12 @@
 package com.travelAgency.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelAgency.db.model.Status;
 import com.travelAgency.db.model.dto.dashboard.DailyCount;
 import com.travelAgency.db.model.dto.dashboard.DashboardStats;
 import com.travelAgency.db.model.dto.dashboard.MonthCount;
+import com.travelAgency.db.model.dto.dashboard.TripByTravelStyle;
+import com.travelAgency.db.repository.TravelStyleAggregation;
 import com.travelAgency.db.repository.TripRepository;
 import com.travelAgency.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private final UserRepository userRepository;
   private final TripRepository tripRepository;
 
@@ -58,5 +62,14 @@ public class DashboardServiceImpl implements DashboardService {
   @Override
   public List<DailyCount> getTripsCreatedPerDay() {
     return tripRepository.getTripsCreatedPerDay();
+  }
+
+  @Override
+  public List<TripByTravelStyle> getTripsByTravelStyle() {
+    List<TravelStyleAggregation> projections = tripRepository.getTripsByTravelStyleAggregation();
+
+    return projections.stream()
+        .map(p -> new TripByTravelStyle(p.getTravelStyle(), p.getCount()))
+        .toList();
   }
 }

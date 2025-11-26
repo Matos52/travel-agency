@@ -31,6 +31,8 @@ interface DashboardContextType {
   fetchUsersPerDay: () => Promise<void>;
   tripsPerDay: DailyCount;
   fetchTripsPerDay: () => Promise<void>;
+  tripsByTravelStyle: TripByTravelStyle[];
+  fetchTripsByTravelStyle: () => Promise<void>;
 }
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(
@@ -47,6 +49,9 @@ export const DashboardProvider = ({
     useState<DashboardStats>(emptyDashboardStats);
   const [usersPerDay, setUsersPerDay] = useState<DailyCount>(emptyDailyCount);
   const [tripsPerDay, setTripsPerDay] = useState<DailyCount>(emptyDailyCount);
+  const [tripsByTravelStyle, setTripsByTravelStyle] = useState<
+    TripByTravelStyle[]
+  >([]);
 
   const fetchDashboardStats = async () => {
     try {
@@ -67,7 +72,7 @@ export const DashboardProvider = ({
       });
       setUsersPerDay(data);
     } catch (error) {
-      console.log("Failed to fetch dashboardStats", error);
+      console.log("Failed to fetch usersPerDay", error);
       setUsersPerDay(emptyDailyCount);
     }
   };
@@ -79,8 +84,20 @@ export const DashboardProvider = ({
       });
       setTripsPerDay(data);
     } catch (error) {
-      console.log("Failed to fetch dashboardStats", error);
+      console.log("Failed to fetch tripsPerDay", error);
       setTripsPerDay(emptyDailyCount);
+    }
+  };
+
+  const fetchTripsByTravelStyle = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/getTripsByTravelStyle`, {
+        withCredentials: true,
+      });
+      setTripsByTravelStyle(data);
+    } catch (error) {
+      console.log("Failed to fetch tripsByTravelStyle", error);
+      setTripsByTravelStyle([]);
     }
   };
 
@@ -92,7 +109,9 @@ export const DashboardProvider = ({
         usersPerDay,
         fetchUsersPerDay,
         tripsPerDay,
-        fetchTripsPerDay
+        fetchTripsPerDay,
+        tripsByTravelStyle,
+        fetchTripsByTravelStyle,
       }}
     >
       {children}

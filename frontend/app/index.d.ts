@@ -154,6 +154,11 @@ declare interface DailyCount {
   count: number;
 }
 
+declare interface TripByTravelStyle {
+  travelStyle: string;
+  count: number;
+}
+
 declare interface CreateTripResponse {
   id?: string;
 }

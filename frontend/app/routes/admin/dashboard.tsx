@@ -9,9 +9,14 @@ import {
   SplineAreaSeries,
   Tooltip,
 } from "@syncfusion/ej2-react-charts";
+import {
+  GridComponent,
+  ColumnDirective,
+  ColumnsDirective
+} from "@syncfusion/ej2-react-grids";
 import { Header, StatsCard, TripCard } from "components";
 import { useEffect, useMemo } from "react";
-import { userXAxis, userYAxis } from "~/constants";
+import { tripXAxis, tripYAxis, userXAxis, userYAxis } from "~/constants";
 import { useDashboard } from "~/context/DashboardContext";
 import { useTrip } from "~/context/TripContext";
 import { useUser } from "~/context/UserContext";
@@ -26,6 +31,8 @@ const Dashboard = () => {
     fetchUsersPerDay,
     tripsPerDay,
     usersPerDay,
+    tripsByTravelStyle,
+    fetchTripsByTravelStyle,
   } = useDashboard();
   const { trips, fetchTrips } = useTrip();
 
@@ -40,8 +47,29 @@ const Dashboard = () => {
   const mappedUsers: UsersItineraryCount[] = users.map((user) => ({
     imageUrl: user.imageUrl,
     name: user.username,
-    count: user.itineraryCreated ?? Math.floor(Math.random() * 10),
+    count: Number(user.itineraryCreated),
   }));
+
+  const showedTrips = allTrips.map((trip) => ({
+    imageUrl: trip.imageUrls[0],
+    name: trip.name,
+    interest: trip.interests,
+  }));
+
+  const usersAndTrips = [
+    {
+      title: "Latest user signups",
+      dataSource: mappedUsers,
+      field: "count",
+      headerText: "Trips created",
+    },
+    {
+      title: "Trips based on interests",
+      dataSource: showedTrips,
+      field: "interest",
+      headertext: "Interests",
+    },
+  ];
 
   useEffect(() => {
     Promise.all([
@@ -50,6 +78,7 @@ const Dashboard = () => {
       fetchTripsPerDay(),
       fetchUsers(0, 4),
       fetchTrips(0, 4),
+      fetchTripsByTravelStyle(),
     ]);
   }, []);
 
@@ -144,10 +173,88 @@ const Dashboard = () => {
               type="Column"
               name="Column"
               columnWidth={0.3}
-              cornerRadius={{topLeft: 10, topRight: 10}}
+              cornerRadius={{ topLeft: 10, topRight: 10 }}
+            />
+            <SeriesDirective
+              dataSource={usersPerDay}
+              xName="day"
+              yName="count"
+              type="SplineArea"
+              name="Wave"
+              fill="rgba(71, 132, 238, 0.3)"
+              border={{ width: 2, color: "#4784EE" }}
             />
           </SeriesCollectionDirective>
         </ChartComponent>
+
+        <ChartComponent
+          id="chart-2"
+          primaryXAxis={tripXAxis}
+          primaryYAxis={tripYAxis}
+          title="Trip Trends"
+          tooltip={{ enable: true }}
+        >
+          <Inject
+            services={[
+              ColumnSeries,
+              SplineAreaSeries,
+              Category,
+              DataLabel,
+              Tooltip,
+            ]}
+          />
+
+          <SeriesCollectionDirective>
+            <SeriesDirective
+              dataSource={tripsByTravelStyle}
+              xName="travelStyle"
+              yName="count"
+              type="Column"
+              name="day"
+              columnWidth={0.3}
+              cornerRadius={{ topLeft: 10, topRight: 10 }}
+            />
+          </SeriesCollectionDirective>
+        </ChartComponent>
+      </section>
+
+      <section className="user-trip wrapper">
+        {usersAndTrips.map(({ title, dataSource, field, headerText }, i) => (
+          <div key={i} className="flex flex-col gap-5">
+            <h3 className="p-20-semibold text-dark-100">{title}</h3>
+
+            <GridComponent
+              dataSource={dataSource}
+              gridLines="None"
+            >
+              <ColumnsDirective>
+                <ColumnDirective
+                  field="name"
+                  headerText="Name"
+                  width="200"
+                  textAlign="Left"
+                  template={(props: UsersItineraryCount) => (
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src={props.imageUrl}
+                        alt="user"
+                        className="rounded-full size-8 aspect-square"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span>{props.name}</span>
+                    </div>
+                  )}
+                />
+                <ColumnDirective
+                  field={field}
+                  headerText={headerText}
+                  width="150"
+                  textAlign="Left"
+                />
+              </ColumnsDirective>
+            </GridComponent>
+          </div>
+        ))}
       </section>
     </main>
   );

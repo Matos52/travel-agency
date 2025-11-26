@@ -21,4 +21,16 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
           GROUP BY CAST(t.createdAt AS date)
           """)
   List<DailyCount> getTripsCreatedPerDay();
+
+  @Query(
+      value = """
+          SELECT 
+            JSON_UNQUOTE(JSON_EXTRACT(t.trip_detail, '$.travelStyle')) AS travelStyle,
+            COUNT(*) AS count
+          FROM trip t
+          GROUP BY JSON_UNQUOTE(JSON_EXTRACT(t.trip_detail, '$.travelStyle'))
+          """,
+      nativeQuery = true
+  )
+  List<TravelStyleAggregation> getTripsByTravelStyleAggregation();
 }
