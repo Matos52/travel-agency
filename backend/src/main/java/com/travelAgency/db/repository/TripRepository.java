@@ -24,8 +24,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
   @Query(
       value = """
-          SELECT 
-            JSON_UNQUOTE(JSON_EXTRACT(t.trip_detail, '$.travelStyle')) AS travelStyle,
+          SELECT JSON_UNQUOTE(JSON_EXTRACT(t.trip_detail, '$.travelStyle')) AS travelStyle,
             COUNT(*) AS count
           FROM trip t
           GROUP BY JSON_UNQUOTE(JSON_EXTRACT(t.trip_detail, '$.travelStyle'))

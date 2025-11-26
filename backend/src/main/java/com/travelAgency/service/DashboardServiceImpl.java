@@ -20,7 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
 
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private final UserRepository userRepository;
   private final TripRepository tripRepository;
 
