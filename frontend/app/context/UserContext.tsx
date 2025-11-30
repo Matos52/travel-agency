@@ -64,7 +64,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      const data = await axios.post(
+      await axios.post(
         `${backendUrl}/userLogout`,
         {},
         { withCredentials: true }

@@ -18,7 +18,7 @@ const AdminLayout = () => {
   }
 
   //user does not have rights to see dashboard page
-  if(user.status !== 'USER') {
+  if(user.status !== 'ADMIN') {
     return <Navigate to="/" replace />;
   }
 

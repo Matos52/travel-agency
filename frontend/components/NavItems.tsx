@@ -49,7 +49,7 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
             <img
               src="/assets/icons/logout.svg"
               alt="logout"
-              className="size-6"
+              className="size-6 rotate-180"
               referrerPolicy="no-referrer"
             />
           </button>
