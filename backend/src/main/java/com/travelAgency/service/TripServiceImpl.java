@@ -63,6 +63,7 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<TripDTO> getTrips(int pageIndex, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, Sort.by("createdAt").descending());
     Page<Trip> trips = tripRepository.findAll(pageRequest);
@@ -70,6 +71,7 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public TripDTO getTrip(Long id) {
     Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Trip.class));
     return tripMapper.toTripDTO(trip);

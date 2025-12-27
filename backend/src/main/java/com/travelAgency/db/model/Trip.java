@@ -28,7 +28,6 @@ public class Trip {
   @Column(name = "image_url", length = 1024)
   private List<String> imageUrls = new ArrayList<>();
   private LocalDateTime createdAt;
-  private String paymentLink;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   @ToString.Exclude

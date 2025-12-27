@@ -1,4 +1,5 @@
-import RootNavbar from "components/RootNavbar";
+import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
+import { MobileSidebar, NavItems } from "components";
 import { Navigate, Outlet } from "react-router";
 import { useUser } from "~/context/UserContext";
 
@@ -16,9 +17,16 @@ const PageLayout = () => {
   }
 
   return (
-    <div className="bg-light-200">
-      <RootNavbar />
-      <Outlet />
+    <div className="admin-layout">
+      <MobileSidebar />
+      <aside className="w-full max-w-[270px] hidden lg:block">
+        <SidebarComponent width={270} enableGestures={false}>
+          <NavItems />
+        </SidebarComponent>
+      </aside>
+      <aside className="children">
+        <Outlet />
+      </aside>
     </div>
   );
 };

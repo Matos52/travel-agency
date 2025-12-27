@@ -8,5 +8,6 @@ public record TripDTO(
     String tripDetail,
     List<String> imageUrls,
     LocalDateTime createdAt,
-    String paymentLink) {
+    String userImageUrl,
+    String createdBy) {
 }

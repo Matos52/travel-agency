@@ -9,7 +9,11 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@google/generative-ai": "^0.24.1",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
     "@syncfusion/ej2-base": "^31.1.20",
@@ -17,6 +21,7 @@
     "@syncfusion/ej2-react-charts": "^31.1.21",
     "@syncfusion/ej2-react-dropdowns": "^31.1.20",
     "@syncfusion/ej2-react-grids": "^31.1.21",
+    "@syncfusion/ej2-react-inputs": "^32.1.19",
     "@syncfusion/ej2-react-maps": "^31.1.17",
     "@syncfusion/ej2-react-navigations": "^31.1.20",
     "@syncfusion/ej2-react-splitbuttons": "^31.1.17",
@@ -36,6 +41,7 @@
     "@types/node": "^22",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "baseline-browser-mapping": "^2.9.9",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",

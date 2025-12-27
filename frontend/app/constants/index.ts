@@ -4,7 +4,13 @@ import { formatDate } from "~/lib/utils";
 export const sidebarItems = [
   {
     id: 1,
-    icon: "/assets/icons/home.svg",
+    icon: "/assets/icons/house.svg",
+    label: "Home",
+    href: "/home",
+  },
+  {
+    id: 2,
+    icon: "/assets/icons/dashboard.svg",
     label: "Dashboard",
     href: "/dashboard",
   },

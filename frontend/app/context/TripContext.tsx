@@ -6,7 +6,8 @@ const emptyCreatedTrip: CreatedTrip = {
   tripDetail: "",
   imageUrls: [],
   createdAt: "",
-  paymentLink: ""
+  createdBy: "",
+  userImageUrl: ""
 };
 
 interface TripContextType {

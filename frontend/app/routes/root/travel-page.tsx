@@ -17,12 +17,18 @@ const TravelPage = () => {
   } = useTrip();
 
   const allTrips = useMemo(() => {
-    return trips.map(({ id, tripDetail, imageUrls }) => ({
+    return trips.map(({ id, tripDetail, imageUrls, createdBy, userImageUrl }) => ({
       id,
       ...(tripDetail ? parseTripData(tripDetail) : {}),
-      imageUrls: imageUrls,
+      imageUrls,
+      createdBy,
+      userImageUrl
     }));
   }, [trips]);
+
+  console.log(allTrips);
+
+  const featuredTrips = allTrips.slice(0, 7);
 
   useEffect(() => {
     fetchTrips(pageIndex, pageSize);
@@ -71,54 +77,49 @@ const TravelPage = () => {
         />
         <div className="featured">
           <article>
-            <FeaturedDestination
-              bgImage="bg-card-1"
-              containerClass="h-1/3 lg:h-1/2"
-              bigCard
-              title="Barcelona Tour"
-              rating={4.2}
-              activityCount={196}
-            />
-
-            <div className="travel-featured">
+            {featuredTrips[0] && (
               <FeaturedDestination
-                bgImage="bg-card-2"
+                id={featuredTrips[0].id}
+                bgImage={featuredTrips[0].imageUrls?.[0] ?? ""}
+                containerClass="h-1/3 lg:h-1/2"
                 bigCard
-                title="London"
+                title={featuredTrips[0].name ?? ""}
                 rating={4.5}
-                activityCount={512}
+                activityCount={235}
+                userImageUrl={featuredTrips[0].userImageUrl}
+                createdBy={featuredTrips[0].createdBy}
               />
-              <FeaturedDestination
-                bgImage="bg-card-3"
-                bigCard
-                title="Australia Tour"
-                rating={3.5}
-                activityCount={250}
-              />
+            )}
+            <div className="travel-featured">
+              {featuredTrips.slice(1, 3).map((item) => (
+                <FeaturedDestination
+                  id={item.id}
+                  key={item.id}
+                  bgImage={item.imageUrls?.[0] ?? ""}
+                  bigCard
+                  title={item.name ?? ""}
+                  rating={4.5}
+                  activityCount={235}
+                  userImageUrl={item.userImageUrl}
+                  createdBy={item.createdBy}
+                />
+              ))}
             </div>
           </article>
           <div className="flex flex-col gap-[30px]">
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-4"
-              title="Spain Tour"
-              rating={3.8}
-              activityCount={150}
-            />
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-5"
-              title="Japan"
-              rating={5}
-              activityCount={150}
-            />
-            <FeaturedDestination
-              containerClass="w-full h-[240px]"
-              bgImage="bg-card-6"
-              title="Italy Tour"
-              rating={4.2}
-              activityCount={500}
-            />
+            {featuredTrips.slice(3, 7).map((item) => (
+              <FeaturedDestination
+                id={item.id}
+                key={item.id}
+                containerClass="w-full h-[240px]"
+                bgImage={item.imageUrls?.[0] ?? ""}
+                title={item.name ?? ""}
+                rating={4.5}
+                activityCount={235}
+                userImageUrl={item.userImageUrl}
+                createdBy={item.createdBy}
+              />
+            ))}
           </div>
         </div>
       </section>

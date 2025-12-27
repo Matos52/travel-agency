@@ -3,8 +3,8 @@ import {
   ChipDirective,
   ChipListComponent,
 } from "@syncfusion/ej2-react-buttons";
-import { Header, InfoPill, TripCard } from "components";
-import { useEffect, useMemo } from "react";
+import { Header, InfoPill, RatingComponent, TripCard } from "components";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { useTrip } from "~/context/TripContext";
 import { cn, getFirstWord, parseTripData } from "~/lib/utils";
@@ -71,9 +71,16 @@ const TripDetail = () => {
         title="Trip Details"
         description="View and edit AI-generated travel plans"
       />
+
       <section className="container wrapper-md">
         <header>
-          <h1 className="p-40-semibold text-dark-100">{name}</h1>
+          <div className="flex justify-between">
+            <h1 className="p-40-semibold text-dark-100">{name}</h1>
+            <p className="ml-1 bg-amber-300 rounded-2xl px-2 py-0.5 text-3xl font-semibold text-amber-900">
+              76%
+            </p>
+          </div>
+
           <div className="flex items-center gap-5">
             <InfoPill
               text={`${duration} day plan`}
@@ -83,7 +90,7 @@ const TripDetail = () => {
             <InfoPill
               text={
                 itinerary
-                  ?.slice(0, 4)
+                  ?.slice(0, 3)
                   .map((item) => item.location)
                   .join(", ") || ""
               }
@@ -108,8 +115,8 @@ const TripDetail = () => {
           ))}
         </section>
 
-        <section className="flex gap-3 md:gap-5 items-center flex-wrap">
-          <ChipListComponent id="travel-chip">
+        <section className="flex gap-3 md:gap-5 items-center justify-between flex-wrap">
+          <ChipListComponent id="travel-chip" cssClass="!p-0 !m-0 !pl-0 !ml-0">
             <ChipsDirective>
               {pillsItems
                 .filter((p) => p.text)
@@ -122,32 +129,24 @@ const TripDetail = () => {
                 ))}
             </ChipsDirective>
           </ChipListComponent>
-
-          <ul className="flex gap-1 items-center">
-            {Array(5)
-              .fill("null")
-              .map((_, index) => (
-                <li key={index}>
-                  <img
-                    src="/assets/icons/star.svg"
-                    alt="star"
-                    className="size-[18px]"
-                  />
-                </li>
-              ))}
-
-            <li className="ml-1">
-              <ChipListComponent>
-                <ChipsDirective>
-                  <ChipDirective
-                    text="4.9/5"
-                    cssClass="!bg-yellow-50 !text-yellow-700"
-                  />
-                </ChipsDirective>
-              </ChipListComponent>
-            </li>
-          </ul>
+          <RatingComponent />
         </section>
+
+        <div className="flex items-center gap-5">
+          <p className="text-gray-600 text-xs md:text-sm font-normal">
+            Created by
+          </p>
+          <div className="flex items-center gap-2">
+            <img
+              className="size-10 rounded-full aspect-square"
+              src={trip.userImageUrl}
+              alt={trip.createdBy}
+            />
+            <p className="text-xs md:text-sm font-normal text-dark-400">
+              {trip.createdBy}
+            </p>
+          </div>
+        </div>
 
         <section className="title">
           <article>

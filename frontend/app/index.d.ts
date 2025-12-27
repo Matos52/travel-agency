@@ -3,7 +3,8 @@ declare interface CreatedTrip {
   tripDetail: string;
   imageUrls: string[];
   createdAt: string;
-  paymentLink: string;
+  createdBy: string;
+  userImageUrl: string;
 }
 
 declare interface CreatedUser {
@@ -15,21 +16,6 @@ declare interface CreatedUser {
   itineraryCreated: number | string;
   status: "USER" | "ADMIN";
 }
-
-declare interface BaseUser {
-  id: string;
-  name: string;
-  email: string;
-  dateJoined: string;
-  imageUrl: string;
-}
-
-declare interface UserData extends BaseUser {
-  itineraryCreated: number | string;
-  status: "user" | "admin";
-}
-
-declare type User = BaseUser;
 
 declare interface Country {
   name: string;
@@ -113,24 +99,6 @@ declare interface TrendResult {
   percentage: number;
 }
 
-// declare interface DashboardStats {
-//   totalUsers: number;
-//   usersJoined: {
-//     currentMonth: number;
-//     lastMonth: number;
-//   };
-//   userRole: {
-//     total: number;
-//     currentMonth: number;
-//     lastMonth: number;
-//   };
-//   totalTrips: number;
-//   tripsCreated: {
-//     currentMonth: number;
-//     lastMonth: number;
-//   };
-// }
-
 declare interface DashboardStats {
   totalUsers: number;
   totalUsersWithUserRole: number;
@@ -164,12 +132,15 @@ declare interface CreateTripResponse {
 }
 
 declare interface DestinationProps {
+  id: string | number;
   containerClass?: string;
   bigCard?: boolean;
   activityCount: number;
   rating: number;
   bgImage: string;
   title: string;
+  userImageUrl: string;
+  createdBy: string;
 }
 
 type GetAllTripsResponse = {
