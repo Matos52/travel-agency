@@ -12,6 +12,7 @@ import { useState } from "react";
 import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { useNavigate } from "react-router";
+import { useTrip } from "~/context/TripContext";
 
 export const loader = async () => {
   const response = await fetch(
@@ -28,7 +29,9 @@ export const loader = async () => {
 };
 
 const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { createTrip } = useTrip();
   const countries = loaderData as Country[];
   const navigate = useNavigate();
 
@@ -40,9 +43,6 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     duration: 0,
     groupType: "",
   });
-
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const countryData = countries.map((country) => ({
     text: country.name,
@@ -81,33 +81,15 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
       return;
     }
 
-    try {
-      const response = await fetch(`${backendUrl}/trips`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          country: formData.country,
-          numberOfDays: formData.duration,
-          travelStyle: formData.travelStyle,
-          interest: formData.interest,
-          budget: formData.budget,
-          groupType: formData.groupType,
-        }),
-      });
+    const result: CreateTripResponse | null = await createTrip(formData);
 
-      const result: CreateTripResponse = await response.json();
-
-      if (result?.id) {
-        navigate(`/trips/${result.id}`);
-      } else {
-        console.error("Failed to generate a trip");
-      }
-    } catch (error) {
-      console.error("Error generating trip", error);
-    } finally {
-      setLoading(false);
+    if (result?.id) {
+      navigate(`/trips/${result.id}`);
+    } else {
+      setError("Failed to generate a trip");
     }
+
+    setLoading(false);
   };
 
   const handleChange = (key: keyof TripFormData, value: string | number) => {

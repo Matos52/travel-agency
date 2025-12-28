@@ -7,13 +7,14 @@ const emptyCreatedTrip: CreatedTrip = {
   imageUrls: [],
   createdAt: "",
   createdBy: "",
-  userImageUrl: ""
+  userImageUrl: "",
 };
 
 interface TripContextType {
   trip: CreatedTrip;
   setTrip: (trip: CreatedTrip) => void;
   trips: CreatedTrip[];
+  createTrip: (tripData: TripFormData) => Promise<CreateTripResponse | null>;
   fetchTrip: (tripId: number) => Promise<void>;
   fetchTrips: (pageIndex: number, pageSize: number) => Promise<void>;
   pageIndex: number;
@@ -35,6 +36,27 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const [pageSize, setPageSize] = useState(8);
   const [totalElements, setTotalElements] = useState(0);
 
+  const createTrip = async (tripData: TripFormData) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/trips`,
+        {
+          country: tripData.country,
+          numberOfDays: tripData.duration,
+          travelStyle: tripData.travelStyle,
+          interest: tripData.interest,
+          budget: tripData.budget,
+          groupType: tripData.groupType,
+        },
+        { withCredentials: true }
+      );
+      return data;
+    } catch (error) {
+      console.error("Error generating trip", error);
+      return null;
+    }
+  };
+
   const fetchTrip = async (tripId: number) => {
     try {
       const { data } = await axios.get(`${backendUrl}/trips/${tripId}`, {
@@ -42,7 +64,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
       });
       setTrip(data);
     } catch (error) {
-      console.log(`Failed to fetch trip with id: ${tripId}`, error);
+      console.error(`Failed to fetch trip with id: ${tripId}`, error);
       setTrip(emptyCreatedTrip);
     }
   };
@@ -56,7 +78,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
       setTrips(data.content);
       setTotalElements(data.totalElements);
     } catch (error) {
-      console.log("Failed to fetch trips", error);
+      console.error("Failed to fetch trips", error);
     }
   };
 
@@ -66,6 +88,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
         trip,
         setTrip,
         trips,
+        createTrip,
         fetchTrip,
         fetchTrips,
         pageIndex,
