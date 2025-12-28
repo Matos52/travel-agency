@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface TripMapper {
 
   @Mapping(source = "user.imageUrl", target = "userImageUrl")
-  @Mapping(source = "user.username", target = "createdBy")
+  @Mapping(source = "user.fullName", target = "createdBy")
   TripDTO toTripDTO(Trip trip);
 }

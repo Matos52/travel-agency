@@ -1,10 +1,12 @@
 package com.travelAgency.service;
 
 import com.travelAgency.db.model.Trip;
+import com.travelAgency.db.model.TripRating;
 import com.travelAgency.db.model.User;
 import com.travelAgency.db.model.dto.trip.TripDTO;
-import com.travelAgency.db.model.dto.trip.TripRequest;
+import com.travelAgency.db.model.dto.trip.CreateTripRequest;
 import com.travelAgency.db.model.dto.trip.TripResponse;
+import com.travelAgency.db.repository.TripRatingRepository;
 import com.travelAgency.db.repository.TripRepository;
 import com.travelAgency.db.repository.UserRepository;
 import com.travelAgency.exception.EntityNotFoundException;
@@ -25,22 +27,23 @@ public class TripServiceImpl implements TripService {
 
   private final UserRepository userRepository;
   private final TripRepository tripRepository;
+  private final TripRatingRepository tripRatingRepository;
   private final GeminiService geminiService;
   private final UnsplashService unsplashService;
   private final TripMapper tripMapper;
 
   @Override
   @Transactional
-  public TripResponse createTrip(TripRequest tripRequest) {
+  public TripResponse createTrip(CreateTripRequest createTripRequest, String userEmail) {
 
-    String prompt = buildPrompt(tripRequest);
+    String prompt = buildPrompt(createTripRequest);
 
     // Call gemini service logic
     String generatedTripPlan = geminiService.generateTripPlan(prompt);
 
     User user = userRepository
-        .findByEmail(tripRequest.userEmail())
-        .orElseThrow(() -> new UserNotFoundException(tripRequest.userEmail(), User.class));
+        .findByEmail(userEmail)
+        .orElseThrow(() -> new UserNotFoundException(userEmail, User.class));
 
     Trip trip = Trip.builder()
                     .tripDetail(generatedTripPlan)
@@ -52,7 +55,11 @@ public class TripServiceImpl implements TripService {
 
     // Call unsplash service logic
     List<String> imageUrls =
-        unsplashService.getImages(tripRequest.country(), tripRequest.interest(), tripRequest.travelStyle());
+        unsplashService.getImages(
+            createTripRequest.country(),
+            createTripRequest.interest(),
+            createTripRequest.travelStyle()
+        );
     trip.setImageUrls(imageUrls);
 
     User createdUser = userRepository.save(user);
@@ -77,7 +84,28 @@ public class TripServiceImpl implements TripService {
     return tripMapper.toTripDTO(trip);
   }
 
-  private String buildPrompt(TripRequest tripRequest) {
+  @Override
+  @Transactional
+  public void rateTrip(Long id, int rating, String userEmail) {
+    Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Trip.class));
+
+    User user = userRepository
+        .findByEmail(userEmail)
+        .orElseThrow(() -> new UserNotFoundException(userEmail, User.class));
+
+    // Check if the user already rated a trip, if yes just change rating
+    TripRating tripRating = tripRatingRepository.findByTripIdAndUserEmail(id, userEmail).orElseGet(
+        () -> {
+          TripRating tr = TripRating.builder().build();
+          tr.setTripAndUser(trip, user);
+          return tr;
+        }
+    );
+
+    tripRating.setRating(rating);
+  }
+
+  private String buildPrompt(CreateTripRequest createTripRequest) {
 
     return String.format(
         """
@@ -128,18 +156,18 @@ public class TripServiceImpl implements TripService {
                 ]
                 }
             """,
-        tripRequest.numberOfDays(),
-        tripRequest.country(),
-        tripRequest.budget(),
-        tripRequest.interest(),
-        tripRequest.travelStyle(),
-        tripRequest.groupType(),
-        tripRequest.numberOfDays(),
-        tripRequest.budget(),
-        tripRequest.travelStyle(),
-        tripRequest.country(),
-        tripRequest.interest(),
-        tripRequest.groupType()
+        createTripRequest.numberOfDays(),
+        createTripRequest.country(),
+        createTripRequest.budget(),
+        createTripRequest.interest(),
+        createTripRequest.travelStyle(),
+        createTripRequest.groupType(),
+        createTripRequest.numberOfDays(),
+        createTripRequest.budget(),
+        createTripRequest.travelStyle(),
+        createTripRequest.country(),
+        createTripRequest.interest(),
+        createTripRequest.groupType()
     );
   }
 }

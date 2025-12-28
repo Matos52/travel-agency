@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record TripRequest(
+public record CreateTripRequest(
     @NotBlank(message = "Country is required")
     String country,
     @Min(1)
@@ -19,8 +19,6 @@ public record TripRequest(
     @NotBlank(message = "Budget is required")
     String budget,
     @NotBlank(message = "Group Type is required")
-    String groupType,
-    @NotNull(message = "User email is required")
-    String userEmail
+    String groupType
 ) {
 }

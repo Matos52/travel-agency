@@ -34,7 +34,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get(`${backendUrl}/getUser`, {
+        const { data } = await axios.get(`${backendUrl}/users/me`, {
           withCredentials: true,
         });
         setUser(data);
@@ -51,7 +51,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUsers = async (pageIndex: number, pageSize: number) => {
     try {
-      const { data } = await axios.get(`${backendUrl}/getUsers`, {
+      const { data } = await axios.get(`${backendUrl}/users`, {
         params: { pageIndex, pageSize },
         withCredentials: true,
       });
@@ -65,7 +65,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       await axios.post(
-        `${backendUrl}/userLogout`,
+        `${backendUrl}/auth/logout`,
         {},
         { withCredentials: true }
       );

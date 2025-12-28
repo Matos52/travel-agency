@@ -41,14 +41,15 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
       Authentication authentication) throws IOException {
 
     OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-    String username = oAuth2User.getAttribute("name");
+
+    String fullName = oAuth2User.getAttribute("name");
     String email = oAuth2User.getAttribute("email");
     String accountId = oAuth2User.getAttribute("sub");
     String imageUrl = oAuth2User.getAttribute("picture");
 
     userRepository.findByEmail(email).orElseGet(() -> {
       User user = User.builder()
-                      .username(username)
+                      .fullName(fullName)
                       .email(email)
                       .accountId(accountId)
                       .imageUrl(imageUrl)
@@ -64,8 +65,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     cookie.setHttpOnly(true);
     cookie.setPath("/");
     cookie.setMaxAge((int) (Duration.ofDays(7).getSeconds()));
-    response.addCookie(cookie);
 
+    response.addCookie(cookie);
     response.sendRedirect(frontendUrl);
   }
 }

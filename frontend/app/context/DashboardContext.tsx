@@ -55,7 +55,7 @@ export const DashboardProvider = ({
 
   const fetchDashboardStats = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/getDashboardStats`, {
+      const { data } = await axios.get(`${backendUrl}/dashboardStats`, {
         withCredentials: true,
       });
       setDashboardStats(data);
@@ -67,7 +67,7 @@ export const DashboardProvider = ({
 
   const fetchUsersPerDay = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/getUsersPerDay`, {
+      const { data } = await axios.get(`${backendUrl}/usersPerDay`, {
         withCredentials: true,
       });
       setUsersPerDay(data);
@@ -79,7 +79,7 @@ export const DashboardProvider = ({
 
   const fetchTripsPerDay = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/getTripsPerDay`, {
+      const { data } = await axios.get(`${backendUrl}/tripsPerDay`, {
         withCredentials: true,
       });
       setTripsPerDay(data);
@@ -91,7 +91,7 @@ export const DashboardProvider = ({
 
   const fetchTripsByTravelStyle = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/getTripsByTravelStyle`, {
+      const { data } = await axios.get(`${backendUrl}/tripsByTravelStyle`, {
         withCredentials: true,
       });
       setTripsByTravelStyle(data);

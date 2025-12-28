@@ -22,17 +22,23 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String username;
+  private String fullName;
   private String email;
   private String accountId;
   private String imageUrl;
   private LocalDateTime joinedAt;
   private Integer itineraryCreated;
+
   @Enumerated(EnumType.STRING)
   private Status status;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   private List<Trip> trips = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
+  private List<TripRating> ratings = new ArrayList<>();
 
   @PrePersist
   protected void onCreate() {
@@ -51,6 +57,14 @@ public class User implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority("ROLE_" + status.name()));
+  }
+
+  /* We override getUsername() from UserDetails to return the email instead of the actual username.
+  This is necessary because Spring Security uses getUsername() as the principal identifier for authentication,
+  and in our system, the email is the unique identifier for users. */
+  @Override
+  public String getUsername() {
+    return email;
   }
 
   @Override

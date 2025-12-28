@@ -3,14 +3,16 @@ package com.travelAgency.controller;
 import com.travelAgency.db.model.dto.dashboard.DailyCount;
 import com.travelAgency.db.model.dto.dashboard.DashboardStats;
 import com.travelAgency.db.model.dto.dashboard.TripByTravelStyle;
+import com.travelAgency.db.model.dto.trip.RateTripRequest;
 import com.travelAgency.db.model.dto.trip.TripDTO;
-import com.travelAgency.db.model.dto.trip.TripRequest;
+import com.travelAgency.db.model.dto.trip.CreateTripRequest;
 import com.travelAgency.db.model.dto.trip.TripResponse;
 import com.travelAgency.db.model.dto.user.UserDTO;
 import com.travelAgency.service.DashboardService;
 import com.travelAgency.service.TripService;
 import com.travelAgency.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CommonsLog
@@ -30,12 +33,13 @@ public class TravelAgencyController {
   private final TripService tripService;
   private final DashboardService dashboardService;
 
-  @GetMapping("/getUser")
-  ResponseEntity<UserDTO> getUser(@CookieValue("ACCESS_TOKEN") String token) {
-    return ResponseEntity.ok().body(userService.getUser(token));
+  @GetMapping("/users/me")
+  ResponseEntity<UserDTO> getUser(Principal principal) {
+    String userEmail = principal.getName();
+    return ResponseEntity.ok().body(userService.getUser(userEmail));
   }
 
-  @GetMapping("/getUsers")
+  @GetMapping("/users")
   ResponseEntity<Page<UserDTO>> getUsers(
       @RequestParam(defaultValue = "0") @Min(0) int pageIndex,
       @RequestParam(defaultValue = "5") @Min(0) int pageSize) {
@@ -43,15 +47,16 @@ public class TravelAgencyController {
     return ResponseEntity.ok().body(users);
   }
 
-  @PostMapping("/userLogout")
+  @PostMapping("/auth/logout")
   ResponseEntity<HttpStatus> logout(HttpServletResponse response) {
     userService.logout(response);
     return ResponseEntity.noContent().build();
   }
 
-  @PostMapping("/create-trip")
-  ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
-    return ResponseEntity.ok().body(tripService.createTrip(tripRequest));
+  @PostMapping("/trips")
+  ResponseEntity<TripResponse> createTrip(@RequestBody @Valid CreateTripRequest createTripRequest, Principal principal) {
+    String userEmail = principal.getName();
+    return ResponseEntity.ok().body(tripService.createTrip(createTripRequest, userEmail));
   }
 
   @GetMapping("/trips/{tripId}")
@@ -67,22 +72,29 @@ public class TravelAgencyController {
     return ResponseEntity.ok().body(trips);
   }
 
-  @GetMapping("/getDashboardStats")
+  @PostMapping("/trips/{tripId}/rating")
+  ResponseEntity<HttpStatus> rateTrip(@PathVariable Long tripId, @RequestBody @Valid RateTripRequest rateTripRequest, Principal principal) {
+    String userEmail = principal.getName();
+    tripService.rateTrip(tripId, rateTripRequest.rating(), userEmail);
+    return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/dashboardStats")
   ResponseEntity<DashboardStats> getDashboardStats() {
     return ResponseEntity.ok().body(dashboardService.getDashboardStats());
   }
 
-  @GetMapping("/getUsersPerDay")
+  @GetMapping("/usersPerDay")
   ResponseEntity<List<DailyCount>> getUsersPerDay() {
     return ResponseEntity.ok().body(dashboardService.getUsersJoinedAtPerDay());
   }
 
-  @GetMapping("/getTripsPerDay")
+  @GetMapping("/tripsPerDay")
   ResponseEntity<List<DailyCount>> getTripsPerDay() {
     return ResponseEntity.ok().body(dashboardService.getTripsCreatedPerDay());
   }
 
-  @GetMapping("/getTripsByTravelStyle")
+  @GetMapping("/tripsByTravelStyle")
   ResponseEntity<List<TripByTravelStyle>> getTripsByTravelStyle() {
     return ResponseEntity.ok().body(dashboardService.getTripsByTravelStyle());
   }

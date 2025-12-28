@@ -11,7 +11,6 @@ import { cn, formatKey } from "~/lib/utils";
 import { useState } from "react";
 import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
-import { useUser } from "~/context/UserContext";
 import { useNavigate } from "react-router";
 
 export const loader = async () => {
@@ -30,7 +29,6 @@ export const loader = async () => {
 
 const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const { user } = useUser();
   const countries = loaderData as Country[];
   const navigate = useNavigate();
 
@@ -84,7 +82,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     }
 
     try {
-      const response = await fetch(`${backendUrl}/create-trip`, {
+      const response = await fetch(`${backendUrl}/trips`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -95,7 +93,6 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
           interest: formData.interest,
           budget: formData.budget,
           groupType: formData.groupType,
-          userEmail: user?.email,
         }),
       });
 

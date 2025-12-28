@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface UserService {
 
-  UserDTO getUser(String token);
+  UserDTO getUser(String userEmail);
 
   Page<UserDTO> getUsers(int pageIndex, int pageSize);
 

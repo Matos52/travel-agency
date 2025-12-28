@@ -21,9 +21,8 @@ public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
 
   @Override
-  public UserDTO getUser(String token) {
-    String email = jwtService.extractSubject(token);
-    User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email, User.class));
+  public UserDTO getUser(String userEmail) {
+    User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail, User.class));
     return userMapper.toUserDTO(user);
   }
 
