@@ -8,6 +8,9 @@ const emptyCreatedTrip: CreatedTrip = {
   createdAt: "",
   createdBy: "",
   userImageUrl: "",
+  averageRating: 0,
+  ratingsCount: 0,
+  myRating: 0,
 };
 
 interface TripContextType {
@@ -22,6 +25,7 @@ interface TripContextType {
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
   setPageSize: React.Dispatch<React.SetStateAction<number>>;
   totalElements: number;
+  rateTrip: (rating: number, tripId: number) => Promise<void>;
 }
 
 export const TripContext = createContext<TripContextType | undefined>(
@@ -35,6 +39,23 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(8);
   const [totalElements, setTotalElements] = useState(0);
+
+  const rateTrip = async (rating: number, tripId: number) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/trips/${tripId}/rating`,
+        {
+          rating,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      setTrip(data);
+    } catch (error) {
+      console.log(`Failed to rate trip with id: ${tripId}`, error);
+    }
+  };
 
   const createTrip = async (tripData: TripFormData) => {
     try {
@@ -96,6 +117,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
         setPageIndex,
         setPageSize,
         totalElements,
+        rateTrip,
       }}
     >
       {children}

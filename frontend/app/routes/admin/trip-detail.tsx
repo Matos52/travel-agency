@@ -3,8 +3,9 @@ import {
   ChipDirective,
   ChipListComponent,
 } from "@syncfusion/ej2-react-buttons";
+import StarIcon from "@mui/icons-material/Star";
 import { Header, InfoPill, RatingComponent, TripCard } from "components";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import { useTrip } from "~/context/TripContext";
 import { cn, getFirstWord, parseTripData } from "~/lib/utils";
@@ -45,6 +46,11 @@ const TripDetail = () => {
     country,
   } = tripData || {};
 
+  const displayRating =
+    typeof trip.averageRating === "number"
+      ? trip.averageRating.toFixed(1)
+      : "?";
+
   const pillsItems = [
     { text: travelStyle, bg: "!bg-pink-50 !text-pink-500" },
     { text: groupType, bg: "!bg-primary-50 !text-primary-500" },
@@ -76,9 +82,12 @@ const TripDetail = () => {
         <header>
           <div className="flex justify-between">
             <h1 className="p-40-semibold text-dark-100">{name}</h1>
-            <p className="ml-1 bg-amber-300 rounded-2xl px-2 py-0.5 text-3xl font-semibold text-amber-900">
-              76%
-            </p>
+            <div className="flex items-center gap-1 rounded-lg bg-amber-100 px-2 py-0.5">
+              <span className="text-2xl font-semibold text-amber-700">
+                {displayRating}
+              </span>
+              <StarIcon className="!h-6 !w-6 text-amber-400" />
+            </div>
           </div>
 
           <div className="flex items-center gap-5">

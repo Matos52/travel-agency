@@ -2,6 +2,7 @@ package com.travelAgency.service;
 
 import com.travelAgency.db.model.dto.trip.TripDTO;
 import com.travelAgency.db.model.dto.trip.CreateTripRequest;
+import com.travelAgency.db.model.dto.trip.TripForListDTO;
 import com.travelAgency.db.model.dto.trip.TripResponse;
 import org.springframework.data.domain.Page;
 
@@ -9,9 +10,9 @@ public interface TripService {
 
   TripResponse createTrip(CreateTripRequest createTripRequest, String userEmail);
 
-  Page<TripDTO> getTrips(int pageIndex, int pageSize);
+  Page<TripForListDTO> getTrips(int pageIndex, int pageSize);
 
-  TripDTO getTrip(Long id);
+  TripDTO getTrip(Long id, String userEmail);
 
-  void rateTrip(Long id, int rating, String userEmail);
+  TripDTO rateTrip(Long id, int rating, String userEmail);
 }

@@ -5,6 +5,9 @@ declare interface CreatedTrip {
   createdAt: string;
   createdBy: string;
   userImageUrl: string;
+  averageRating: number;
+  ratingsCount: number;
+  myRating: number | null;
 }
 
 declare interface CreatedUser {
@@ -172,4 +175,8 @@ declare interface TripFormData {
   budget: string;
   duration: number;
   groupType: string;
+}
+
+declare interface RateTrip {
+  rating: number;
 }

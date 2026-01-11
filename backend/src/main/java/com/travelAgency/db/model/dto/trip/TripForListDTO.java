@@ -3,7 +3,7 @@ package com.travelAgency.db.model.dto.trip;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record TripDTO(
+public record TripForListDTO(
     Long id,
     String tripDetail,
     List<String> imageUrls,
@@ -11,6 +11,6 @@ public record TripDTO(
     String userImageUrl,
     String createdBy,
     Double averageRating,
-    Integer ratingsCount,
-    Integer myRating) {
+    Integer ratingsCount
+) {
 }

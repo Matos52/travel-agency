@@ -5,10 +5,9 @@ import com.travelAgency.db.model.TripRating;
 import com.travelAgency.db.model.User;
 import com.travelAgency.db.model.dto.trip.TripDTO;
 import com.travelAgency.db.model.dto.trip.CreateTripRequest;
+import com.travelAgency.db.model.dto.trip.TripForListDTO;
 import com.travelAgency.db.model.dto.trip.TripResponse;
-import com.travelAgency.db.repository.TripRatingRepository;
-import com.travelAgency.db.repository.TripRepository;
-import com.travelAgency.db.repository.UserRepository;
+import com.travelAgency.db.repository.*;
 import com.travelAgency.exception.EntityNotFoundException;
 import com.travelAgency.exception.UserNotFoundException;
 import com.travelAgency.mapper.TripMapper;
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,22 +72,31 @@ public class TripServiceImpl implements TripService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<TripDTO> getTrips(int pageIndex, int pageSize) {
+  public Page<TripForListDTO> getTrips(int pageIndex, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, Sort.by("createdAt").descending());
     Page<Trip> trips = tripRepository.findAll(pageRequest);
-    return trips.map(tripMapper::toTripDTO);
+
+    List<Long> tripIds = trips.stream().map(Trip::getId).toList();
+    List<TripRatingSummaryForListProjection> summaries = tripRatingRepository.getSummariesForTripsByIds(tripIds);
+    Map<Long, TripRatingSummaryForListProjection> summaryMap =
+        summaries.stream().collect(Collectors.toMap(TripRatingSummaryForListProjection::getTripId, s -> s));
+
+    return trips.map(trip -> tripMapper.toTripForListDTO(trip, summaryMap.get(trip.getId())));
   }
 
   @Override
   @Transactional(readOnly = true)
-  public TripDTO getTrip(Long id) {
+  public TripDTO getTrip(Long id, String userEmail) {
     Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Trip.class));
-    return tripMapper.toTripDTO(trip);
+
+    TripRatingSummaryProjection summary = tripRatingRepository.getSummary(id, userEmail);
+
+    return tripMapper.toTripDTO(trip, summary);
   }
 
   @Override
   @Transactional
-  public void rateTrip(Long id, int rating, String userEmail) {
+  public TripDTO rateTrip(Long id, int rating, String userEmail) {
     Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Trip.class));
 
     User user = userRepository
@@ -103,6 +113,10 @@ public class TripServiceImpl implements TripService {
     );
 
     tripRating.setRating(rating);
+
+    TripRatingSummaryProjection summary = tripRatingRepository.getSummary(id, userEmail);
+
+    return tripMapper.toTripDTO(trip, summary);
   }
 
   private String buildPrompt(CreateTripRequest createTripRequest) {

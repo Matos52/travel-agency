@@ -17,13 +17,25 @@ const TravelPage = () => {
   } = useTrip();
 
   const allTrips = useMemo(() => {
-    return trips.map(({ id, tripDetail, imageUrls, createdBy, userImageUrl }) => ({
-      id,
-      ...(tripDetail ? parseTripData(tripDetail) : {}),
-      imageUrls,
-      createdBy,
-      userImageUrl
-    }));
+    return trips.map(
+      ({
+        id,
+        tripDetail,
+        imageUrls,
+        createdBy,
+        userImageUrl,
+        averageRating,
+        ratingsCount,
+      }) => ({
+        id,
+        ...(tripDetail ? parseTripData(tripDetail) : {}),
+        imageUrls,
+        createdBy,
+        userImageUrl,
+        averageRating,
+        ratingsCount,
+      })
+    );
   }, [trips]);
 
   console.log(allTrips);
@@ -84,8 +96,8 @@ const TravelPage = () => {
                 containerClass="h-1/3 lg:h-1/2"
                 bigCard
                 title={featuredTrips[0].name ?? ""}
-                rating={4.5}
-                activityCount={235}
+                rating={featuredTrips[0].averageRating ?? "?"}
+                activityCount={featuredTrips[0].ratingsCount ?? 0}
                 userImageUrl={featuredTrips[0].userImageUrl}
                 createdBy={featuredTrips[0].createdBy}
               />
@@ -98,8 +110,8 @@ const TravelPage = () => {
                   bgImage={item.imageUrls?.[0] ?? ""}
                   bigCard
                   title={item.name ?? ""}
-                  rating={4.5}
-                  activityCount={235}
+                  rating={item.averageRating ?? "?"}
+                  activityCount={item.ratingsCount ?? 0}
                   userImageUrl={item.userImageUrl}
                   createdBy={item.createdBy}
                 />
@@ -114,8 +126,8 @@ const TravelPage = () => {
                 containerClass="w-full h-[240px]"
                 bgImage={item.imageUrls?.[0] ?? ""}
                 title={item.name ?? ""}
-                rating={4.5}
-                activityCount={235}
+                rating={item.averageRating ?? "?"}
+                activityCount={item.ratingsCount ?? 0}
                 userImageUrl={item.userImageUrl}
                 createdBy={item.createdBy}
               />
