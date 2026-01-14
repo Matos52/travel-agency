@@ -31,7 +31,7 @@ app:
     expiration-ms: 604800000  # 7 days
     cookie-name: ACCESS_TOKEN
   frontend:
-    url: http://localhost:5173/  # where to redirect after login
+    url: http://localhost:5173/home  # where to redirect after login
   gemini:
     api-key: ${GEMINI_API_KEY}
     model: gemini-2.0-flash

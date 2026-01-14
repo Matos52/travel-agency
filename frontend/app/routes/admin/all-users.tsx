@@ -56,7 +56,7 @@ const AllUsers = () => {
                   className="rounded-full size-8 aspect-square"
                   referrerPolicy="no-referrer"
                 />
-                <span>{props.username}</span>
+                <span>{props.fullName}</span>
               </div>
             )}
           />

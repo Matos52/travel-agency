@@ -11,7 +11,7 @@ declare interface CreatedTrip {
 }
 
 declare interface CreatedUser {
-  username: string;
+  fullName: string;
   email: string;
   accountId: number;
   imageUrl: string;

@@ -8,9 +8,12 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
 
   return (
     <section className="nav-items">
-      <Link to="/" className="link-logo">
-        <img src="/assets/icons/logo.svg" alt="logo" className="size-[30px]" />
-        <h1>Tourvisto</h1>
+      <Link to="/home" className="link-logo">
+        <img
+          src="/assets/icons/Matriply.png"
+          alt="logo"
+          className="h-20 w-auto object-contain"
+        />
       </Link>
 
       <div className="container">
@@ -39,10 +42,10 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
         <footer className="nav-footer">
           <img
             src={user?.imageUrl || "/assets/images/david.webp"}
-            alt={user?.username || "David"}
+            alt={user?.fullName || "David"}
           />
           <article>
-            <h2>{user?.username}</h2>
+            <h2>{user?.fullName}</h2>
             <p>{user?.email}</p>
           </article>
           <button onClick={logout} className="cursor-pointer">

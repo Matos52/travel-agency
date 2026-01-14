@@ -1,6 +1,6 @@
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { Link } from "react-router";
-import.meta.env.VITE_BACKEND_URL
+import.meta.env.VITE_BACKEND_URL;
 
 const signIn = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -14,14 +14,13 @@ const signIn = () => {
       <section className="size-full glassmorphism flex-center px-6">
         <div className="sign-in-card">
           <header className="header">
-            <Link to="/">
+            <Link to="/home">
               <img
-                src="/assets/icons/logo.svg"
+                src="/assets/icons/Matriply.png"
                 alt="logo"
-                className="size-[30px]"
+                className="rounded-xl"
               />
             </Link>
-            <h1 className="p-28-bold text-dark-100">Tourvisto</h1>
           </header>
           <article>
             <h2 className="p-28-semibold text-dark-100 text-center">

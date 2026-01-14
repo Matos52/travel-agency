@@ -5,7 +5,7 @@ import com.travelAgency.db.model.Status;
 import java.time.LocalDateTime;
 
 public record UserDTO(
-    String username,
+    String fullName,
     String email,
     String accountId,
     String imageUrl,

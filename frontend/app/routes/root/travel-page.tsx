@@ -66,7 +66,7 @@ const TravelPage = () => {
               </h1>
               <p className="text-dark-100">
                 Customize your travel itinerary in minutes - pick your
-                destination, set your preferences, and explore witth confidence.
+                destination, set your preferences, and explore with confidence.
               </p>
             </article>
 
@@ -175,18 +175,17 @@ const TravelPage = () => {
 
       <footer className="h-28 bg-white">
         <div className="wrapper footer-container">
-          <Link to="/">
+          <Link to="/home">
             <img
-              src="/assets/icons/logo.svg"
+              src="/assets/icons/Matriply.png"
               alt="logo"
-              className="size-[30px]"
+              className="h-10 w-auto object-contain"
             />
-            <h1>Tourvisto</h1>
           </Link>
 
           <div>
             {["Terms & Conditions", "Privacy Policy"].map((item) => (
-              <Link to="/" key={item}>
+              <Link to="/home" key={item}>
                 {item}
               </Link>
             ))}

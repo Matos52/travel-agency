@@ -47,8 +47,8 @@ const TripCard = ({
                 text={getFirstWord(tag)}
                 cssClass={cn(
                   index === 1
-                    ? "!bg-pink-50 !text-pink-500"
-                    : "!bg-success-50 !text-success-700"
+                    ? "!bg-slate-100 !text-slate-700"
+                    : "!bg-primary-50 !text-primary-700"
                 )}
               />
             ))}

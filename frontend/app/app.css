@@ -19,9 +19,9 @@
   --color-gray-200: #eaecf0;
   --color-gray-500: #667085;
   --color-gray-700: #344054;
-  --color-primary-50: #e9f3fb;
-  --color-primary-100: #256ff1;
-  --color-primary-500: #175cd3;
+  --color-primary-50: #ECFCCB;
+  --color-primary-100: #4D7C0F;
+  --color-primary-500: #365314;
   --color-light-100: #ecf2ef;
   --color-light-200: #f9fbfc;
   --color-light-300: #f2f4f7;
@@ -40,12 +40,6 @@
 
   --background-image-auth: url("/assets/images/auth-img.webp");
   --background-image-hero: url("/assets/images/hero-img.png");
-  --background-image-card-1: url("/assets/images/card-img-1.png");
-  --background-image-card-2: url("/assets/images/card-img-2.png");
-  --background-image-card-3: url("/assets/images/card-img-3.png");
-  --background-image-card-4: url("/assets/images/card-img-4.png");
-  --background-image-card-5: url("/assets/images/card-img-5.png");
-  --background-image-card-6: url("/assets/images/card-img-6.png");
   --background-image-linear100: linear-gradient(
     105deg,
     rgba(207, 241, 255, 0.8) 14.17%,
@@ -73,7 +67,7 @@
     @apply text-red-500 text-base font-medium text-center;
   }
   .all-users {
-    @apply w-full min-h-screen flex flex-col gap-10;
+    @apply w-full min-h-screen flex flex-col gap-10 pt-12 lg:pt-10;
   }
 
   .stats-card {
@@ -162,7 +156,7 @@
   }
 
   .travel-detail {
-    @apply flex flex-col gap-10 pb-20;
+    @apply flex flex-col gap-10 pb-20 pt-12 lg:pt-10;
 
     .travel-div {
       @apply flex flex-col lg:flex-row gap-10;
@@ -358,7 +352,7 @@
   .admin-layout {
     @apply flex flex-col lg:flex-row h-screen w-full;
     .children {
-      @apply w-full h-full bg-light-200 pt-12 lg:pt-10;
+      @apply w-full h-full bg-light-200;
     }
   }
   .user-trip {
@@ -370,7 +364,7 @@
   }
 
   .dashboard {
-    @apply flex flex-col gap-10 w-full  pb-20;
+    @apply flex flex-col gap-10 w-full pb-20 pt-12 lg:pt-10;
 
     .container {
       @apply flex flex-col gap-5 mt-2.5;
@@ -541,4 +535,17 @@ body {
   position: absolute;
   top: 45px;
   right: 40px;
+}
+
+/** SYNCFUSION PAGER CSS **/
+/* ACTIVE PAGE */
+.e-pager .e-currentitem {
+  background-color: #4D7C0F !important;
+  color: #ffffff !important;
+}
+
+/* HOVER */
+.e-pager .e-numericitem:hover {
+  background-color: #4D7C0F !important;
+  color: #ffffff !important;
 }

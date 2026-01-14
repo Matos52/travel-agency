@@ -97,7 +97,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   };
 
   return (
-    <main className="flex flex-col gap-10 pb-20 wrapper">
+    <main className="flex flex-col gap-10 pb-20 pt-12 lg:pt-10 wrapper">
       <Header
         title="Add a New Trip"
         description="View and edit AI Generated travel plans"

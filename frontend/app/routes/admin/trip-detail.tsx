@@ -52,10 +52,10 @@ const TripDetail = () => {
       : "?";
 
   const pillsItems = [
-    { text: travelStyle, bg: "!bg-pink-50 !text-pink-500" },
-    { text: groupType, bg: "!bg-primary-50 !text-primary-500" },
-    { text: budget, bg: "!bg-success-50 !text-success-700" },
-    { text: interests, bg: "!bg-navy-50 !text-navy-500" },
+    { text: travelStyle, bg: "!bg-primary-50 !text-primary-700" },
+    { text: groupType, bg: "!bg-teal-50 !text-teal-700" },
+    { text: budget, bg: "!bg-amber-50 !text-amber-700" },
+    { text: interests, bg: "!bg-slate-100 !text-slate-700" },
   ];
 
   const visitTimeAndWeatherInfo = [

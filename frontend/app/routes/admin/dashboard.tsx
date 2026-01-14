@@ -12,7 +12,7 @@ import {
 import {
   GridComponent,
   ColumnDirective,
-  ColumnsDirective
+  ColumnsDirective,
 } from "@syncfusion/ej2-react-grids";
 import { Header, StatsCard, TripCard } from "components";
 import { useEffect, useMemo } from "react";
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   const mappedUsers: UsersItineraryCount[] = users.map((user) => ({
     imageUrl: user.imageUrl,
-    name: user.username,
+    name: user.fullName,
     count: Number(user.itineraryCreated),
   }));
 
@@ -94,7 +94,7 @@ const Dashboard = () => {
   return (
     <main className="dashboard wrapper">
       <Header
-        title={`Welcome ${user?.username ?? "Guest"}`}
+        title={`Welcome ${user?.fullName.trim().split(/\s+/)[0] ?? "Guest"} 👋`}
         description="Track activity, trends and popular destinations in real time"
       />
       <section className="flex flex-col gap-6">
@@ -153,7 +153,7 @@ const Dashboard = () => {
           primaryXAxis={userXAxis}
           primaryYAxis={userYAxis}
           title="User Growth"
-          tooltip={{ enable: true }}
+          tooltip={{ enable: true, opacity: 0.9 }}
         >
           <Inject
             services={[
@@ -166,23 +166,27 @@ const Dashboard = () => {
           />
 
           <SeriesCollectionDirective>
+            {/* Column – Users */}
             <SeriesDirective
               dataSource={usersPerDay}
               xName="day"
               yName="count"
               type="Column"
-              name="Column"
+              name="Users"
               columnWidth={0.3}
               cornerRadius={{ topLeft: 10, topRight: 10 }}
+              fill="#4D7C0F" // olive
             />
+
+            {/* Spline Area – Trend */}
             <SeriesDirective
               dataSource={usersPerDay}
               xName="day"
               yName="count"
               type="SplineArea"
-              name="Wave"
-              fill="rgba(71, 132, 238, 0.3)"
-              border={{ width: 2, color: "#4784EE" }}
+              name="Trend"
+              fill="rgba(77, 124, 15, 0.25)" // light olive
+              border={{ width: 2, color: "#365314" }} // dark olive
             />
           </SeriesCollectionDirective>
         </ChartComponent>
@@ -192,27 +196,21 @@ const Dashboard = () => {
           primaryXAxis={tripXAxis}
           primaryYAxis={tripYAxis}
           title="Trip Trends"
-          tooltip={{ enable: true }}
+          tooltip={{ enable: true, opacity: 0.9 }}
         >
-          <Inject
-            services={[
-              ColumnSeries,
-              SplineAreaSeries,
-              Category,
-              DataLabel,
-              Tooltip,
-            ]}
-          />
+          <Inject services={[ColumnSeries, Category, DataLabel, Tooltip]} />
 
           <SeriesCollectionDirective>
+            {/* Column – Trips */}
             <SeriesDirective
               dataSource={tripsByTravelStyle}
               xName="travelStyle"
               yName="count"
               type="Column"
-              name="day"
+              name="Trips"
               columnWidth={0.3}
               cornerRadius={{ topLeft: 10, topRight: 10 }}
+              fill="#4D7C0F" // olive
             />
           </SeriesCollectionDirective>
         </ChartComponent>
@@ -223,10 +221,7 @@ const Dashboard = () => {
           <div key={i} className="flex flex-col gap-5">
             <h3 className="p-20-semibold text-dark-100">{title}</h3>
 
-            <GridComponent
-              dataSource={dataSource}
-              gridLines="None"
-            >
+            <GridComponent dataSource={dataSource} gridLines="None">
               <ColumnsDirective>
                 <ColumnDirective
                   field="name"
