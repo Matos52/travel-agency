@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -28,7 +34,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<CreatedUser[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
   useEffect(() => {
@@ -49,18 +55,21 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     fetchUser();
   }, []);
 
-  const fetchUsers = async (pageIndex: number, pageSize: number) => {
-    try {
-      const { data } = await axios.get(`${backendUrl}/users`, {
-        params: { pageIndex, pageSize },
-        withCredentials: true,
-      });
-      setUsers(data.content);
-      setTotalElements(data.totalElements);
-    } catch (error) {
-      console.error("Failed to fetch users", error);
-    }
-  };
+  const fetchUsers = useCallback(
+    async (pageIndex: number, pageSize: number) => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/users`, {
+          params: { pageIndex, pageSize },
+          withCredentials: true,
+        });
+        setUsers(data.content);
+        setTotalElements(data.totalElements);
+      } catch (error) {
+        console.error("Failed to fetch users", error);
+      }
+    },
+    [backendUrl]
+  );
 
   const logout = async () => {
     try {
@@ -89,7 +98,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setPageIndex,
         setPageSize,
         totalElements,
-        loading
+        loading,
       }}
     >
       {children}

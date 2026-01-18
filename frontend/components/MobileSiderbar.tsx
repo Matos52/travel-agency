@@ -13,13 +13,12 @@ const MobileSiderbar = () => {
   return (
     <div className="mobile-sidebar wrapper">
       <header>
-        <Link to="/">
+        <Link to="/home" className="link-logo">
           <img
-            src="/assets/icons/logo.svg"
+            src="/assets/icons/Matriply.png"
             alt="logo"
-            className="size-[30px]"
+            className="h-14 w-auto object-contain"
           />
-          <h1>Tourvisto</h1>
         </Link>
 
         <button onClick={toggleSidebar}>

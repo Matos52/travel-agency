@@ -9,7 +9,9 @@ import { parseTripData } from "~/lib/utils";
 const TravelPage = () => {
   const {
     trips,
+    featuredTrips,
     fetchTrips,
+    fetchFeaturedTrips,
     pageIndex,
     pageSize,
     setPageIndex,
@@ -38,13 +40,35 @@ const TravelPage = () => {
     );
   }, [trips]);
 
-  console.log(allTrips);
-
-  const featuredTrips = allTrips.slice(0, 7);
+  const allFeaturedTrips = useMemo(() => {
+    return featuredTrips.map(
+      ({
+        id,
+        tripDetail,
+        imageUrls,
+        createdBy,
+        userImageUrl,
+        averageRating,
+        ratingsCount,
+      }) => ({
+        id,
+        ...(tripDetail ? parseTripData(tripDetail) : {}),
+        imageUrls,
+        createdBy,
+        userImageUrl,
+        averageRating,
+        ratingsCount,
+      })
+    );
+  }, [featuredTrips]);
 
   useEffect(() => {
     fetchTrips(pageIndex, pageSize);
-  }, [pageIndex, pageSize]);
+  }, [fetchTrips, pageIndex, pageSize]);
+
+  useEffect(() => {
+    fetchFeaturedTrips();
+  }, [fetchFeaturedTrips]);
 
   const handlePageChange = (page: number) => {
     // Syncfusion Pager start from 1 → backend wants 0-index
@@ -64,13 +88,13 @@ const TravelPage = () => {
               <h1 className="p-72-bold text-dark-100">
                 Plan Your Trip with Ease
               </h1>
-              <p className="text-dark-100">
+              <p className="text-gray-700 font-semibold">
                 Customize your travel itinerary in minutes - pick your
                 destination, set your preferences, and explore with confidence.
               </p>
             </article>
 
-            <Link to="#trips">
+            <Link to="#featured-trips">
               <ButtonComponent
                 type="button"
                 className="button-class !h-11 !w-full md:!w-[240px]"
@@ -82,28 +106,31 @@ const TravelPage = () => {
         </div>
       </section>
 
-      <section className="pt-20 wrapper flex flex-col gap-10 h-full">
+      <section
+        id="featured-trips"
+        className="pt-20 wrapper flex flex-col gap-10 h-full"
+      >
         <Header
           title="Featured Travel Destinations"
           description="Check out some of the best places you visit around the world"
         />
         <div className="featured">
           <article>
-            {featuredTrips[0] && (
+            {allFeaturedTrips[0] && (
               <FeaturedDestination
-                id={featuredTrips[0].id}
-                bgImage={featuredTrips[0].imageUrls?.[0] ?? ""}
+                id={allFeaturedTrips[0].id}
+                bgImage={allFeaturedTrips[0].imageUrls?.[0] ?? ""}
                 containerClass="h-1/3 lg:h-1/2"
                 bigCard
-                title={featuredTrips[0].name ?? ""}
-                rating={featuredTrips[0].averageRating ?? "?"}
-                activityCount={featuredTrips[0].ratingsCount ?? 0}
-                userImageUrl={featuredTrips[0].userImageUrl}
-                createdBy={featuredTrips[0].createdBy}
+                title={allFeaturedTrips[0].name ?? ""}
+                rating={allFeaturedTrips[0].averageRating ?? "?"}
+                activityCount={allFeaturedTrips[0].ratingsCount ?? 0}
+                userImageUrl={allFeaturedTrips[0].userImageUrl}
+                createdBy={allFeaturedTrips[0].createdBy}
               />
             )}
             <div className="travel-featured">
-              {featuredTrips.slice(1, 3).map((item) => (
+              {allFeaturedTrips.slice(1, 3).map((item) => (
                 <FeaturedDestination
                   id={item.id}
                   key={item.id}
@@ -119,7 +146,7 @@ const TravelPage = () => {
             </div>
           </article>
           <div className="flex flex-col gap-[30px]">
-            {featuredTrips.slice(3, 7).map((item) => (
+            {allFeaturedTrips.slice(3, 7).map((item) => (
               <FeaturedDestination
                 id={item.id}
                 key={item.id}
@@ -136,7 +163,7 @@ const TravelPage = () => {
         </div>
       </section>
 
-      <section id="trips" className="py-20 wrapper flex flex-col gap-10">
+      <section className="py-20 wrapper flex flex-col gap-10">
         <Header
           title="Handpicked Trips"
           description="Browse well-planned trips designes for your travel style"

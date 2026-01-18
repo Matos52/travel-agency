@@ -4,19 +4,25 @@ import {
   ColumnDirective,
   ColumnsDirective,
   Page,
-  Inject
+  Inject,
 } from "@syncfusion/ej2-react-grids";
 import { cn, formatDate } from "~/lib/utils";
 import { useEffect } from "react";
 import { useUser } from "~/context/UserContext";
 
 const AllUsers = () => {
-  const { users, fetchUsers, pageIndex, pageSize, setPageIndex, totalElements } =
-    useUser();
+  const {
+    users,
+    fetchUsers,
+    pageIndex,
+    pageSize,
+    setPageIndex,
+    totalElements,
+  } = useUser();
 
   useEffect(() => {
     fetchUsers(pageIndex, pageSize);
-  }, [pageIndex, pageSize]);
+  }, [fetchUsers, pageIndex, pageSize]);
 
   const handlePageChange = (args: any) => {
     if (args.requestType === "paging") {
@@ -59,12 +65,6 @@ const AllUsers = () => {
                 <span>{props.fullName}</span>
               </div>
             )}
-          />
-          <ColumnDirective
-            field="email"
-            headerText="Email Address"
-            width="200"
-            textAlign="Left"
           />
           <ColumnDirective
             field="joinedAt"

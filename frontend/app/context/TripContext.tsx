@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import axios from "axios";
 
 const emptyCreatedTrip: CreatedTrip = {
@@ -17,9 +17,11 @@ interface TripContextType {
   trip: CreatedTrip;
   setTrip: (trip: CreatedTrip) => void;
   trips: CreatedTrip[];
+  featuredTrips: CreatedTrip[];
   createTrip: (tripData: TripFormData) => Promise<CreateTripResponse | null>;
   fetchTrip: (tripId: number) => Promise<void>;
   fetchTrips: (pageIndex: number, pageSize: number) => Promise<void>;
+  fetchFeaturedTrips: () => Promise<void>;
   pageIndex: number;
   pageSize: number;
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -36,6 +38,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [trip, setTrip] = useState<CreatedTrip>(emptyCreatedTrip);
   const [trips, setTrips] = useState<CreatedTrip[]>([]);
+  const [featuredTrips, setFeaturedTrips] = useState<CreatedTrip[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(8);
   const [totalElements, setTotalElements] = useState(0);
@@ -90,18 +93,33 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const fetchTrips = async (pageIndex: number, pageSize: number) => {
+  const fetchTrips = useCallback(
+    async (pageIndex: number, pageSize: number) => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/trips`, {
+          params: { pageIndex, pageSize },
+          withCredentials: true,
+        });
+        setTrips(data.content);
+        setTotalElements(data.totalElements);
+      } catch (error) {
+        console.error("Failed to fetch trips", error);
+      }
+    },
+    [backendUrl]
+  );
+
+  const fetchFeaturedTrips = useCallback(async () => {
     try {
       const { data } = await axios.get(`${backendUrl}/trips`, {
-        params: { pageIndex, pageSize },
+        params: { pageIndex: 0, pageSize: 7 },
         withCredentials: true,
       });
-      setTrips(data.content);
-      setTotalElements(data.totalElements);
+      setFeaturedTrips(data.content);
     } catch (error) {
       console.error("Failed to fetch trips", error);
     }
-  };
+  }, [backendUrl]);
 
   return (
     <TripContext.Provider
@@ -109,9 +127,11 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
         trip,
         setTrip,
         trips,
+        featuredTrips,
         createTrip,
         fetchTrip,
         fetchTrips,
+        fetchFeaturedTrips,
         pageIndex,
         pageSize,
         setPageIndex,

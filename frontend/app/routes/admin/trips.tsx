@@ -24,7 +24,7 @@ const Trips = () => {
 
   useEffect(() => {
     fetchTrips(pageIndex, pageSize);
-  }, [pageIndex, pageSize]);
+  }, [fetchTrips, pageIndex, pageSize]);
 
   const handlePageChange = (page: number) => {
     // Syncfusion Pager start from 1 → backend wants 0-index
