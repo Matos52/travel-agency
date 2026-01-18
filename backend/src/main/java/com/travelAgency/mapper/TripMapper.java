@@ -3,8 +3,8 @@ package com.travelAgency.mapper;
 import com.travelAgency.db.model.Trip;
 import com.travelAgency.db.model.dto.trip.TripDTO;
 import com.travelAgency.db.model.dto.trip.TripForListDTO;
-import com.travelAgency.db.repository.TripRatingSummaryForListProjection;
-import com.travelAgency.db.repository.TripRatingSummaryProjection;
+import com.travelAgency.db.repository.projection.TripRatingSummaryForListProjection;
+import com.travelAgency.db.repository.projection.TripRatingSummaryProjection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

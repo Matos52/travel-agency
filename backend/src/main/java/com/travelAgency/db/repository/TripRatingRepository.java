@@ -1,6 +1,8 @@
 package com.travelAgency.db.repository;
 
 import com.travelAgency.db.model.TripRating;
+import com.travelAgency.db.repository.projection.TripRatingSummaryForListProjection;
+import com.travelAgency.db.repository.projection.TripRatingSummaryProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

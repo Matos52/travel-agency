@@ -2,6 +2,7 @@ package com.travelAgency.db.repository;
 
 import com.travelAgency.db.model.Trip;
 import com.travelAgency.db.model.dto.dashboard.DailyCount;
+import com.travelAgency.db.repository.projection.TravelStyleAggregation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

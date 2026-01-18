@@ -3,6 +3,7 @@ package com.travelAgency.service;
 import com.travelAgency.db.model.User;
 import com.travelAgency.db.model.dto.user.UserDTO;
 import com.travelAgency.db.repository.UserRepository;
+import com.travelAgency.db.repository.projection.UserWithRatingCount;
 import com.travelAgency.exception.UserNotFoundException;
 import com.travelAgency.mapper.UserMapper;
 import jakarta.servlet.http.Cookie;
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public Page<UserDTO> getUsers(int pageIndex, int pageSize) {
     PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
-    Page<User> users = userRepository.findAll(pageRequest);
-    return users.map(userMapper::toUserDTO);
+    Page<UserWithRatingCount> users = userRepository.findUsersWithRatingCount(pageRequest);
+    return users.map(userMapper::toUserDTOWithRating);
   }
 
   @Override

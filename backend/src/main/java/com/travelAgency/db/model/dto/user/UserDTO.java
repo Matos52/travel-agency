@@ -11,6 +11,7 @@ public record UserDTO(
     String imageUrl,
     LocalDateTime joinedAt,
     Integer itineraryCreated,
-    Status status
+    Status status,
+    Long ratedTripsCount
 ) {
 }

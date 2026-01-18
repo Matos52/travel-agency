@@ -1,4 +1,4 @@
-package com.travelAgency.db.repository;
+package com.travelAgency.db.repository.projection;
 
 public interface TripRatingSummaryForListProjection {
   Long getTripId();

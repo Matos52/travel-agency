@@ -33,8 +33,8 @@ const AllUsers = () => {
   return (
     <main className="all-users wrapper">
       <Header
-        title="Manage Users"
-        description="Filter, sort and access detailed user profiles"
+        title="Travel Community"
+        description="Connect with fellow travelers and explore their activity"
       />
 
       <GridComponent
@@ -67,6 +67,18 @@ const AllUsers = () => {
             )}
           />
           <ColumnDirective
+            field="itineraryCreated"
+            headerText="Trips Created"
+            width="130"
+            textAlign="Left"
+          />
+          <ColumnDirective
+            field="ratedTripsCount"
+            headerText="Trips Rated"
+            width="130"
+            textAlign="Left"
+          />
+          <ColumnDirective
             field="joinedAt"
             headerText="Date Joined"
             width="140"
@@ -74,12 +86,6 @@ const AllUsers = () => {
             template={({ joinedAt }: { joinedAt: string }) =>
               formatDate(joinedAt)
             }
-          />
-          <ColumnDirective
-            field="itineraryCreated"
-            headerText="Trip Created"
-            width="130"
-            textAlign="Left"
           />
           <ColumnDirective
             field="status"

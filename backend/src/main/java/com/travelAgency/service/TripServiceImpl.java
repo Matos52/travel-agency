@@ -8,6 +8,8 @@ import com.travelAgency.db.model.dto.trip.CreateTripRequest;
 import com.travelAgency.db.model.dto.trip.TripForListDTO;
 import com.travelAgency.db.model.dto.trip.TripResponse;
 import com.travelAgency.db.repository.*;
+import com.travelAgency.db.repository.projection.TripRatingSummaryForListProjection;
+import com.travelAgency.db.repository.projection.TripRatingSummaryProjection;
 import com.travelAgency.exception.EntityNotFoundException;
 import com.travelAgency.exception.UserNotFoundException;
 import com.travelAgency.mapper.TripMapper;
